@@ -1,0 +1,9 @@
+type: "object"
+properties:
+  packageVersion:
+    type: "string"
+  apiVersion:
+    type: "string"
+example:
+  packageVersion: "0.0.1"
+  apiVersion: "0.0.1"

@@ -1,0 +1,51 @@
+post:
+  tags:
+    - api
+  summary: Report damages to the vehicle.
+  description: |
+  operationId: postBookingsRentalBookingIdDamageReport
+  parameters:
+    - in: header
+      name: x-api-username
+      required: true
+      schema:
+        type: string
+    - in: header
+      name: x-api-password
+      required: true
+      schema:
+        type: string
+    - in: header    
+      name: x-api-url
+      required: true
+      schema:
+        type: string
+    - name: rentalBookingId
+      in: path
+      description: rentalBookingId of the vehicle
+      required: true
+      schema:
+        type: string
+  requestBody:
+    x-name: body
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./../requests/postBookingsRentalBookingIdDamageReportRequest.yaml"
+  responses:
+    "200":
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "./../responses/postBookingsRentalBookingIdDamageReportResponse.yaml"
+    "400":
+      description: |
+        Bad Request
+    "404":
+      description: |
+        Not Found
+    "500":
+      description: |
+        Internal Server Error
