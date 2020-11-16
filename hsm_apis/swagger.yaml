@@ -32,14 +32,14 @@ info:
 
       ---
       ---
-      ![States Image](./hsm_apis/b2b-api.png)
+      ![States Image](./hsm_apis/b2b.png)
       # Huf B2B API
 
       [Huf B2B API](./b2b_index.html?defaultModelRendering=model&defaultModelExpandDepth=8)
 
       ---
       ---
-      ![States Image](./hsm_apis/vehicle-mgmt-api.png)
+      ![States Image](./hsm_apis/vmgmt.png)
       # Huf Vehicle & Location Management API
 
       [Huf Vehicle & Location Management API](./vehicle-mgmt-api_index.html?defaultModelRendering=model&defaultModelExpandDepth=8)
