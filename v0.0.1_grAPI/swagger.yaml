@@ -1,0 +1,63 @@
+openapi: "3.0.0"
+info:
+  version: "0.0.1"
+  title: Generic Rental API
+  license:
+    name:  Huf Proprietary
+  contact:
+    email: support@huf-sixsense.com
+  description: |
+      ![States Image](./v0.0.1_grAPI/definitions/grapi.png)
+
+      ## MoveMee - Huf - 3rd Party Booking System Middleware API Documentation
+
+      ### Supported 3rd Party Booking Systems
+      - Bluebird Rentworks
+
+      ### Changelog
+
+      #### 0.0.1
+        - get quotes by using ```POST /api/quote```
+        - retrieve all station locations with ```GET /api/locations```
+        - make a reservation by using ```POST /api/bookings/reserve```
+        - retrieve all your bookings with ```GET /api/bookings```
+        - retrieve a specific booking by id with ```GET /api/bookings/:externalBookingId```
+        - cancel a reservation with ```POST /api/bookings/:externalBookingId/cancel```
+        - execute checkout by using ```POST /api/bookings/:externalBookingId/checkout```
+        - execute checkin by using ```POST /api/bookings/:externalBookingId/checkin```
+
+      ### General API information
+      consumes:
+        - application/json
+      produces:
+        - application/json
+
+#PATHS
+paths:
+
+## Quote
+  /api/quote:
+    $ref: "./definitions/paths/quote.yaml"
+
+## Bookings
+  /api/bookings:
+    $ref: "./definitions/paths/bookings.yaml"
+  /api/bookings/{externalBookingId}:
+    $ref: "./definitions/paths/bookingsExternalBookingId.yaml"
+  /api/bookings/reserve:
+    $ref: "./definitions/paths/bookingsReserve.yaml"
+  /api/bookings/{externalBookingId}/checkout:
+    $ref: "./definitions/paths/bookingsExternalBookingIdCheckout.yaml"
+  /api/bookings/{externalBookingId}/checkin:
+    $ref: "./definitions/paths/bookingsExternalBookingIdcheckin.yaml"
+  /api/bookings/{externalBookingId}/cancel:
+    $ref: "./definitions/paths/bookingsExternalBookingIdCancel.yaml"
+
+## Locations
+  /api/locations:
+    $ref: "./definitions/paths/locations.yaml"
+
+## Events
+# used for internal tests
+  /api/healthcheck:
+    $ref: "./definitions/paths/healthcheck.yaml"

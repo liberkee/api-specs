@@ -1,0 +1,29 @@
+post:
+  tags:
+    - api
+  summary: Checkin a booking. This will close the contract in external booking system.
+  description: |
+  operationId: postBookingsExternalBookingIdCheckin
+  parameters:
+    - name: externalBookingId
+      in: path
+      description: externalBookingId
+      required: true
+      schema:
+        type: "string"
+  responses:
+    "200":
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "./../responses/postBookingsExternalBookingIdCheckinResponse.yaml"
+    "400":
+      description: |
+        Bad Request
+    "404":
+      description: |
+        Not Found
+    "500":
+      description: |
+        Internal Server Error

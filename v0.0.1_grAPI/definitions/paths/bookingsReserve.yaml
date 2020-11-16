@@ -1,0 +1,28 @@
+post:
+  tags:
+    - api
+  summary: Make a reservation of a vehicle class
+  description: |
+  operationId: postBookingsBookingIdCommandsReserve
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./../requests/postBookingsReserveRequest.yaml"
+  responses:
+    "200":
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "./../responses/getBookingsExternalBookingIdResponse.yaml"
+    "400":
+      description: |
+        Bad Request
+    "404":
+      description: |
+        Not Found
+    "500":
+      description: |
+        Internal Server Error

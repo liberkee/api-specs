@@ -1,0 +1,35 @@
+type: "array"
+items:
+  $ref: "./getBookingsExternalBookingIdResponse.yaml"
+example:
+-
+  externalBookingId: "59b633a2613a8a7811b3d5c9"
+  state: "running"
+  pickupTime: "2020-03-16T08:30:00.123+02:00"
+  pickupLocation: "Main"
+  returnTime: "2020-03-19T08:30:00.123+02:00"
+  returnLocation: "Main"
+  payment:
+    rate: "total"
+    currency: "USD"
+    price: "51.50"
+  vehicle:
+    id: "5624cbb0aaed33d0128d6107"
+    name: "Dodge Ram"
+    licensePlate: "K VW 99"
+-
+  externalBookingId: "59b633a2613a8a7811b3d5c9"
+  state: "reserved"
+  pickupTime: "2020-03-16T08:30:00.123+02:00"
+  pickupLocation: "Main"
+  returnTime: "2020-03-19T08:30:00.123+02:00"
+  returnLocation: "Main"
+  payment:
+    rate: "total"
+    currency: "USD"
+    price: "51.50"
+  vehicleClass:
+    id: "LUX"
+    name: "Luxury"
+    acrissCode: "ECMQ"
+    classification: "LUX"

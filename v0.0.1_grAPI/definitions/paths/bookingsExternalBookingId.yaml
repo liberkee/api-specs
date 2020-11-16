@@ -1,0 +1,29 @@
+get:
+  tags:
+    - api
+  summary: Get informations of one of your open reservations
+  description: |
+  operationId: getBookingsExternalBookingId
+  parameters:
+    - name: externalBookingId
+      in: path
+      description: externalBookingId
+      required: true
+      schema:
+        type: "string"
+  responses:
+    "200":
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "./../responses/getBookingsExternalBookingIdResponse.yaml"
+    "400":
+      description: |
+        Bad Request
+    "404":
+      description: |
+        Not Found
+    "500":
+      description: |
+        Internal Server Error
