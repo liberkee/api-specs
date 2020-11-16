@@ -1,0 +1,31 @@
+swagger: "2.0"
+info:
+  contact:
+    email: support@huf-sixsense.com
+  description: |
+      ___
+      # Huf Secure Mobile APIs
+      ___
+      ___
+      To make sure that you see all changes, please hard reload your browser (disable cache) or delete the cache before loading the specs.
+
+      ---
+      ---
+      ![States Image](./hsm_apis/broker.png)
+      # Huf Broker API - TACS keyring distribution
+      ## Available Versions of the Borker API Specification
+      *to display one of the Huf Broker APIs select one of the links below*
+
+      [Huf Broker API Version 0.1.0](./v0.1.0_broker_index.html?defaultModelRendering=model&defaultModelExpandDepth=8)
+
+      ---
+      ---
+      ![States Image](./hsm_apis/grapi.png)
+      # Huf Bluebird Middleware API
+      ## Available Versions of the GRAPI Specification
+      *to display one of the Huf Generic Rental APIs select one of the links below*
+
+      [Huf GRAPI Version 0.0.1](./v0.0.1_grAPI_index.html?defaultModelRendering=model&defaultModelExpandDepth=8)
+
+      ---
+      ---
