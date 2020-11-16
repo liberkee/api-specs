@@ -13,7 +13,6 @@ info:
       ---
       ![States Image](./hsm_apis/broker.png)
       # Huf Broker API - TACS keyring distribution
-      ## Available Versions of the Borker API Specification
 
       [Huf Broker API](./broker_index.html?defaultModelRendering=model&defaultModelExpandDepth=8)
 
@@ -21,7 +20,6 @@ info:
       ---
       ![States Image](./hsm_apis/grapi.png)
       # Huf Bluebird Middleware API
-      ## Available Versions of the GRAPI Specification
 
       [Huf GRAPI](./grapi_index.html?defaultModelRendering=model&defaultModelExpandDepth=8)
 
@@ -44,4 +42,4 @@ info:
       ![States Image](./hsm_apis/vehicle-mgmt-api.png)
       # Huf Vehicle & Location Management API
 
-      [Huf Vehicle & Location Management API](./vehilce-mgmt-api_index.html?defaultModelRendering=model&defaultModelExpandDepth=8)
+      [Huf Vehicle & Location Management API](./vehicle-mgmt-api_index.html?defaultModelRendering=model&defaultModelExpandDepth=8)
