@@ -1,0 +1,59 @@
+description: ""
+type: "object"
+properties: 
+  commandType: 
+    type: "string"
+    minLength: 1
+  correlationId:
+    type: "string"
+    minLength: 1
+  commandPayload:
+    description: ""
+    type: "object"
+    properties: 
+      externalVehicleRef:
+        description: "Reference to the vehicle object as used in the external booking system"
+        type: "string"
+        minLength: 1
+      tenantId:
+        description: "Optional ID specifying the tenant the vehicle belongs to"
+        type: "string"
+        minLength: 1
+      commands:
+        description: "one legal command or one of the two plausible combinations of two commands from the commands below is possible:
+        1. lock
+        2. unlock
+        3. mobilize
+        4. immobilize
+        5. lock + immobilize
+        6. unlock + mobilize"
+        type: "array"
+        minItems: 1
+        maxItems: 2
+        items:
+          description: ""
+          type: "object"
+          properties: 
+            command:
+              description: "Specifies command to be executed"
+              type: "string"
+              enum: [lock, unlock, mobilize, immobilize]
+          required:
+            - command
+    required:
+      - externalVehicleRef
+      - commands
+
+required:
+  - commandType
+  - commandPayload
+
+example:
+  commandType: "huf.operateVehicle"
+  correlationId: "bedaca85-555d-4a84-b9c2-9ca54e4d7d75"
+  commandPayload:
+    externalVehicleRef: "1234"
+    tenantId: "FooRental"
+    commands:
+          -
+            command: "lock"
