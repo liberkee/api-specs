@@ -7,10 +7,10 @@ info:
       ![States Image](./apis/sixsense.png)
       # Huf Secure Mobile APIs
       ___
-      **To make sure that you see all changes:**
-      ** - please hard reload your browser**
-      ** - disable cache or delete the cache before loading the page**
-      ** - use incognito window to view page**
+      To make sure that you see all changes:
+        - please hard reload your browser
+        - disable cache or delete the cache before loading the page
+        - use incognito window to view page
       ---
       # [Huf Broker API](./broker_index.html?defaultModelRendering=model&defaultModelExpandDepth=8)
       ---
