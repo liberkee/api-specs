@@ -1,0 +1,35 @@
+get:
+  tags:
+   - api
+  summary: Retrieve a TACS keyring for the corresponding vehicleAccessGrantId
+  description: |
+      Retrieve a TACS keyring for the corresponding vehicleAccessGrantId
+  operationId: getKeyrings
+  parameters:
+    - name: vehicleAccessGrantId
+      in: query
+      description: vehicleAccessGrantId
+      required: true
+      schema:
+        type: "string"
+    - in: header
+      name: x-ssl-client-cn
+      description: x-ssl-client-cn header will be set automatically. client do not need to set it explicitly.
+      schema:
+        type: string
+      required: true
+  responses:
+    "200":
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "./../responses/getKeyrings.yaml"
+    "400":
+      description: Bad Request
+    "403":
+      description: Forbidden
+    "404":
+      description: Not Found
+    "500":
+      description: Internal Server Error
