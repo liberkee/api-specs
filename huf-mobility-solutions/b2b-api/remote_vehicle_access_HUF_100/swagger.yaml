@@ -1,0 +1,98 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: SixSense Cloud API - remote vehicle access HUF
+  license:
+    name:  Huf Proprietary
+  description: |
+
+      ![Brand Logo](./images/sixsense.png)
+
+      ![States Image](./images/pic_huf.jpg)
+
+      # Purpose of the remote vehicle access API
+
+        - This API allows to remotely operate the vehicle access functions:
+          - lock doors
+          - unlock doors
+          - enable engine start
+          - disable engine start
+
+      # Changelog
+
+      ## 1.0.0
+        - Initial version.
+
+      # Mandatory/optional fields
+        - In this specification, all mandatory data fields are marked with a red asterisk character ('*').
+        - All other data fields are optional.
+
+      # HTTP Status Codes:
+
+        - Unknown command types are accepted by the event handler and 200 is returned. But they will not be processed as no receiver has subscribed to the command type.
+        - Known command type with not matching payload is accepted by the event handler and 200 is returned. But the receiver which has subscribed to the command type will generate an error event due to the broken payload.
+        - In case 40x HTTP errors are returned, the response body is empty (no correlation ID is returned).
+
+      | Http Code | Description | Information |
+      | :---         |     :---      |     :---      |
+      | 200 | Success | |
+      | 400 | Bad Request | |
+      | 401 | Unauthorized | |
+      | 403 | Forbidden - Client identified by certificate not authorized to call this request | |
+      | 422 | Unprocessable Entity - externalVehicleRef not found or route suffixed with unknown resource | |
+      | 500 | Internal Server Error | |
+      | 503 | Service Unavailable | |
+
+      # Failure handling
+
+        This section specifies under which circumstances the HUF remote vehicle access API shall trigger failure events.
+        This specification does not include failures that are already handled by the Event Handler and notified via HTTP error codes.
+        So this speciifcation assumes that the generic structure of the received event is correct and the event payload is at least correct JSON.
+        In case more than one failure occurs in the same event, only the first detected failure is reported.
+        The failure reason field contains a string that describes the failure cause.
+
+      ## Format failures
+
+      In case of mismatches with the specified event format, the failure reasons are not specified in detail, as they may be provided by a validation library. Exact failure reason strings may change when changing or updating such a library.
+
+      If there is a format failure in an "Event", the resulting failure event shall be of type "EventFailed".
+
+
+
+host: HOST:PORT
+basePath: /api/v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+#PATHS
+
+paths:
+
+## Events
+
+  /commands:
+    $ref: "./definitions/paths/commands_operate_vehicle.yaml"
+
+definitions:
+
+# Command types
+
+  operateVehicle:
+    $ref: "./definitions/events/operateVehicle.yaml"
+
+# Models
+
+  commandPayload:
+    $ref: "./definitions/models/commandPayload.yaml"
+
+  command:
+    $ref: "./definitions/models/command.yaml"
+
+# Responses
+
+  eventResponse:
+    $ref: "./definitions/responses/eventResponse.yaml"

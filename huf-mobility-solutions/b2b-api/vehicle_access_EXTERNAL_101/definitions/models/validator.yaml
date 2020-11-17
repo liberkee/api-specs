@@ -1,0 +1,12 @@
+type: "object"
+properties:
+  startTime:
+    type: "string"
+    minLength: 1
+  endTime:
+    type: "string"
+    minLength: 1
+
+required:
+  - startTime
+  - endTime

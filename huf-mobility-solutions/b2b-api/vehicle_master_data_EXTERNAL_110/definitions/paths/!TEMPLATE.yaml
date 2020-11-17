@@ -1,0 +1,68 @@
+post:
+  tags:
+    - lease
+  summary: 
+  description: |
+      
+      ## Authentication
+      
+  operationId: 
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: usually application/json"
+      type: string
+      default: application/json
+    - name: Authorization
+      in: header
+      description: Authentication with Bearer Token
+      type: string
+      default: Bearer
+    - name: 
+      in: body, query, path
+      description: 
+      required: true
+      schema:
+        $ref: "#/definitions/_________"
+  responses:
+    "200":
+      description: Success
+      schema:
+        $ref: "../../swagger.yaml#definitions/response"
+    "400":
+      description: |
+        | subCode | message |
+        | :---         |     :---      |
+        | SUB CODE | MESSAGE |
+        | ___________ | ____________ |
+      schema:
+        $ref: "../../swagger.yaml#definitions/errorResponse"
+    "401":
+      description: |
+        Unauthorized
+      schema:
+        $ref: "../../swagger.yaml#definitions/errorResponse"
+    "403":
+      description: |
+        | subCode | message |
+        | :---         |     :---      |
+        | SUB CODE | MESSAGE |
+        | ___________ | ____________ |
+      schema:
+        $ref: "../../swagger.yaml#definitions/errorResponse"
+    "410":
+      description: |
+        | subCode | message |
+        | :---         |     :---      |
+        | SUB CODE | MESSAGE |
+        | ___________ | ____________ |
+      schema:
+        $ref: "../../swagger.yaml#definitions/errorResponse"
+    "500":
+      description: |
+        | subCode | message |
+        | :---         |     :---      |
+        | SUB CODE | MESSAGE |
+        | ___________ | ____________ |
+      schema:
+        $ref: "../../swagger.yaml#definitions/errorResponse"

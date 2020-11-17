@@ -1,0 +1,153 @@
+swagger: "2.0"
+info:
+  version: "1.0.1"
+  title: SixSense Cloud API - vehicle access EXTERNAL
+  license:
+    name:  Huf Proprietary
+  contact:
+    email: support@huf-sixsense.com
+  description: |
+
+      ![Brand Logo](./images/sixsense.png)
+
+      ![States Image](./vehicle_access_EXTERNAL_101/pic_external.jpg)
+
+      ## Changelog
+
+      # 1.0.1
+        - Added description that the response has an empty body for 40x HTTP errors.
+        - Added clarification on correlationIDs.
+        - Added section failure handling (was distributed as separate pdf before)
+
+      # 1.0.0
+        Approved after review.
+
+      # 0.0.1
+        Initial draft for review.
+
+      # Time formats
+
+        - All times exchanged over this interface shall be based on UTC (Coordinated Universal Time).
+        - All strings representing times shall be formatted according to ISO8601.
+
+      # Event correlation IDs
+
+        - Event correlation IDs enable tracking of all actions performed within the processing systems which are related to one event.
+        - If generation of an event is a direct result of a received event, then the generator shall use the correlationID of the received event. That way, chains of events can be tracked throughout the system.
+        - There are two options where the correlation ID can be generated.
+          1) The recommended option is that the source of an event generates a unique correlation ID and passes it to the event handler as part of the event body.
+          2) Alternatively, the event source may choose to not generate a correlation ID when passing the event to the event handler. In this case, the event handler itself generates a unique correlation ID for the event.
+        - To enable option 2, the correlation ID is defined as optional.
+        - In any case, the correlation ID is returned in the body of the event response. Thus the event source can make use of the correlation ID even in case it does not generate one.
+
+      # HTTP Status Codes:
+
+        - Unknown event types are accepted by the event handler and 200 is returned. But they will not be processed as no receiver has subscribed to the event type.
+        - Known event type with not matching payload is accepted by the event handler and 200 is returned. But the receiver which has subscribed to the event type will generate an error event due to the broken payload.
+        - In case 40x HTTP errors are returned, the response body is empty (no correlation ID is returned).
+
+      | Http Code | Description | Information |
+      | :---         |     :---      |     :---      |
+      | 200 | Success - event was received & persisted | event not necessarily processed successfully |
+      | 400 | Bad Request - broken header or payload or incorrect json |may include subCode |
+      | 401 | Unauthorized - Client certificate missing or invalid | may include subCode for GET Routes |
+      | 403 | Forbidden - Client identified by certificate not authorized to post this event | may include subCode |
+      | 404 | Not Found - route suffixed with unknown resource | may include subCode |
+      | 500 | Internal Server Error | |
+      | 503 | Service Unavailable | |
+
+      # Failure handling
+
+        This page specifies under which circumstances the EXTERNAL vehicle access API shall trigger failure events.
+        This specification does not include failures that are already handled by the Event Handler and notified via HTTP error codes.
+        So this specification assumes that the generic structure of the received event is correct and the event payload is at least correct JSON.
+        Events with a name "<Incoming_Event>Failed" indicate structural issues in the event payload.
+        Events with a name that relates to an outgoing event indicate that generation of the outgoing event was initiated but an error occurred during the processing.
+        In case more than one failure occurs in the same event, only the first detected failure is reported.
+
+        | Event sent to EXTERNAL API | Issue                         | Resulting failure event  | Included failure reason       |
+        |----------------------------|-------------------------------|--------------------------|-------------------------------|
+        | huf.keyringUpdated         | externalUserRef missing       | huf.keyringUpdatedFailed | externalUserRef missing       |
+        | huf.keyringUpdated         | externalUserRef empty         | huf.keyringUpdatedFailed | externalUserRef empty         |
+        | huf.keyringUpdated         | externalUserRef not found     | huf.keyringUpdatedFailed | externalUserRef not found     |
+        | huf.keyringUpdated         | keyring missing               | huf.keyringUpdatedFailed | keyring missing               |
+        | huf.keyringUpdated         | keyring not an object         | huf.keyringUpdatedFailed | keyring must be an object     |
+        | huf.keyringUpdated         | keyring JSON schema incorrect | huf.keyringUpdatedFailed | keyring JSON schema incorrect |
+        | huf.keyringUpdated         | Internal processing error     | huf.keyringUpdatedFailed | Internal processing error     |
+
+host: HOST:PORT
+basePath: /api/v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+#PATHS
+
+paths:
+
+## Events
+
+  /events - huf.keyringUpdated:
+    $ref: "./definitions/paths/events_keyring_updated.yaml"
+
+  /events - huf.keyringUpdateFailed:
+    $ref: "./definitions/paths/events_keyring_update_failed.yaml"
+
+  /events - huf.vehicleAccessGrantedFailed:
+    $ref: "./definitions/paths/events_vehicle_access_granted_failed.yaml"
+
+  /events - huf.vehicleAccessRevokedFailed:
+    $ref: "./definitions/paths/events_vehicle_access_revoked_failed.yaml"
+
+definitions:
+
+# Event types
+
+  keyringUpdated:
+    $ref: "./definitions/events/keyringUpdated.yaml"
+
+  keyringUpdateFailed:
+    $ref: "./definitions/events/keyringUpdateFailed.yaml"
+
+  vehicleAccessGrantedFailed:
+    $ref: "./definitions/events/vehicleAccessGrantedFailed.yaml"
+
+  vehicleAccessRevokedFailed:
+    $ref: "./definitions/events/vehicleAccessRevokedFailed.yaml"
+
+# Responses
+
+  eventResponse:
+    $ref: "./definitions/responses/eventResponse.yaml"
+
+# Models
+
+  serviceGrant:
+    $ref: "./definitions/models/serviceGrant.yaml"
+
+  blob:
+    $ref: "./definitions/models/blob.yaml"
+
+  keyringUpdatedPayload:
+    $ref: "./definitions/models/keyringUpdatedPayload.yaml"
+
+  keyringUpdateFailedPayload:
+    $ref: "./definitions/models/keyringUpdateFailedPayload.yaml"
+
+  vehicleAccessGrantedFailedPayload:
+    $ref: "./definitions/models/vehicleAccessGrantedFailedPayload.yaml"
+
+  vehicleAccessRevokedFailedPayload:
+    $ref: "./definitions/models/vehicleAccessRevokedFailedPayload.yaml"
+
+  keyring:
+    $ref: "./definitions/models/keyring.yaml"
+
+  userLTT:
+    $ref: "./definitions/models/userLTT.yaml"
+
+  validator:
+    $ref: "./definitions/models/validator.yaml"

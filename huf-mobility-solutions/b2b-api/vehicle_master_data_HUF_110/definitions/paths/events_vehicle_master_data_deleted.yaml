@@ -1,0 +1,32 @@
+post:
+  tags: 
+   - approved
+  summary: Notify that master data of a vehicle was deleted.
+  description: | 
+      ## Authentication
+      Client certificate provided by Huf.
+      ## Encrypted transport
+      TLS 1.2 (or higher) is mandatory to use the API.
+      ## Master data deletion of commissioned vehicle
+      Deleting master data of a commissioned results in a failure. Reason: if this would be done, there's no way anymore to decommission the vehicle, because it is not displayed anymore in the Service App. So before deletion, the client shall decommission the vehicle.
+  operationId: events - vehicle master data deleted
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/vehicleMasterDataDeleted"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

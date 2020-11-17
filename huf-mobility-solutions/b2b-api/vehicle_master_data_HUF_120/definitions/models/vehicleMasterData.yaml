@@ -1,0 +1,55 @@
+description: ""
+type: "object"
+properties:
+  tenantId:
+    type: "string"
+    minLength: 1
+    maxLength: 36
+  externalVehicleRef:
+    type: "string"
+    minLength: 1
+    maxLength: 36
+  vin:
+    type: "string"
+    minLength: 1
+    maxLength: 17
+  brand:
+    type: "string"
+    minLength: 1
+    maxLength: 56
+  model:
+    type: "string"
+    minLength: 1
+    maxLength: 56
+  modelYear:
+    type: "string"
+    minLength: 1
+    maxLength: 4
+  additionalProperties:
+    type: "array"
+    items:
+      $ref: "../../swagger.yaml#definitions/property"
+
+required:
+  - externalVehicleRef
+
+example:
+  tenantId: "FooRental"
+  externalVehicleRef: "4321"
+  vin: "1FMCU0G95EUB83509"
+  brand: "Toyota"
+  model: "RAV4"
+  modelYear: "2017"
+  additionalProperties:
+      -
+        name: "name"
+        value: "Steves RAV4"
+      -
+        name: "licensePlate"
+        value: "NY-FAE6137"
+      -
+        name: "comment"
+        value: "check noise!"
+      -
+        name: "color"
+        value: "grey"

@@ -1,0 +1,37 @@
+description: ""
+type: "object"
+properties:
+  vehiclesMasterData:
+    type: "array"
+    items:
+      $ref: "../../swagger.yaml#definitions/vehicleMasterData"
+
+required:
+  - vehiclesMasterData
+
+example:
+  vehiclesMasterData:
+    -
+      tenantId: "FooRental"
+      externalVehicleRef: "4321"
+      vin: "1FMCU0G95EUB83509"
+      brand: "Toyota"
+      model: "RAV4"
+      modelYear: "2017"
+      additionalProperties:
+          -
+            name: "name"
+            value: "Steves RAV4"
+          -
+            name: "licensePlate"
+            value: "NY-FAE6137"
+          -
+            name: "comment"
+            value: "check noise!"
+          -
+            name: "color"
+            value: "grey"
+    -
+      tenantId: "Test"
+      externalVehicleRef: "9999"
+      brand: "DemoCar"

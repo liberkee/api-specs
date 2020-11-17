@@ -1,0 +1,12 @@
+description: ""
+type: "object"
+properties: 
+  timestamp:
+    type: "string"
+    minLength: 1
+  sigma:
+    type: "string"
+    minLength: 1
+
+required:
+  - timestamp

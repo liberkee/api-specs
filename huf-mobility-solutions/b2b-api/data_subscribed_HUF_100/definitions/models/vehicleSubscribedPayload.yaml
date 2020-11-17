@@ -1,0 +1,19 @@
+description: ""
+type: "object"
+properties: 
+  externalVehicleRef: 
+    type: "string"
+    minLength: 1
+  tenantId: 
+    type: "string"
+    minLength: 1
+  subscribeTo: 
+    type: "string"
+    minLength: 1
+  expression: 
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/expression"
+
+required:
+  - externalVehicleRef
+  - subscribeTo

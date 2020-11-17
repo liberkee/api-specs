@@ -1,0 +1,25 @@
+get:
+  tags: 
+   - approved
+  summary: Get service enabler status of one vehicle
+  description: | 
+  operationId: vehicles/{externalVehicleRef}/serviceEnablers
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: tenantId
+      in: query
+      type: string
+  responses:
+    Response body (200 OK):
+      $ref: "../../swagger.yaml#definitions/vehicleServiceEnablers"
+    Response body (404 Not found):
+      $ref: "../../swagger.yaml#definitions/vehicleServiceEnablers404"

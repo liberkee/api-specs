@@ -1,0 +1,37 @@
+description: ""
+type: "object"
+properties: 
+  eventType: 
+    type: "string"
+    minLength: 1
+  correlationId:
+    type: "string"
+    minLength: 1
+  eventPayload: 
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/vehicleStatusUpdatedPayload"
+
+required:
+  - eventType
+  - eventPayload
+
+example:
+  eventType: "huf.vehicleStatusUpdated"
+  correlationId: "bedaca85-555d-4a84-b9c2-9ca54e4d7d75"
+  eventPayload:
+    externalVehicleRef: "4321"
+    tenantId: "FooRental"
+    fuelLevelAbsolute:
+      timestamp: '2018-07-18T08:19:11.650Z'
+      value: '27'
+      unit: 'liter'
+    fuelLevelRelative:
+      timestamp: '2018-07-18T08:19:12.440Z'
+      value: '33'
+      unit: 'percent'
+    odometer:
+      timestamp: '2018-07-18T08:19:25.764Z'
+      value: '15432215'
+      unit: 'meter'
+        
+    

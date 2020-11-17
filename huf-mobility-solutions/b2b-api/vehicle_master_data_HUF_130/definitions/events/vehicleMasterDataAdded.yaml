@@ -1,0 +1,42 @@
+description: ""
+type: "object"
+properties: 
+  eventType: 
+    type: "string"
+    minLength: 1
+  correlationId:
+    type: "string"
+    minLength: 1
+  eventPayload: 
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/vehicleMasterData"
+
+required:
+  - eventType
+  - eventPayload
+
+example:
+  eventType: "huf.vehicleMasterDataAdded"
+  correlationId: "bedaca85-555d-4a84-b9c2-9ca54e4d7d75"
+  eventPayload:
+      tenantId: "FooRental"
+      externalVehicleRef: "4321"
+      vin: "1FMCU0G95EUB83509"
+      brand: "Toyota"
+      model: "RAV4"
+      modelYear: "2017"
+      hufVehicleTypeId: "00000056"
+      additionalProperties:
+          -
+            name: "name"
+            value: "Steves RAV4"
+          -
+            name: "licensePlate"
+            value: "NY-FAE6137"
+          -
+            name: "comment"
+            value: "check noise!"
+          -
+            name: "color"
+            value: "grey"
+    

@@ -1,0 +1,92 @@
+version: "1.0.1"
+title: SixSense Cloud API - vehicle access HSM
+license:
+  name:  Huf Proprietary
+contact:
+  email: support@huf-sixsense.com
+description: |
+
+    ![States Image](./vehicle_access_HSM_101/pic_hsm.jpg)
+
+    ## Changelog
+
+    # 1.0.1
+      - Added clarification on correlationIDs.
+      - Added section keyring principles
+      - Added description that the response has an empty body for 40x HTTP errors.
+      - Added section failure handling (was distributed as separate pdf before)
+
+    # 1.0.0
+      Approved after review.
+
+    # 0.0.1
+      Initial draft for review.
+    
+    # Keyring principles
+      A user's keyring contains the digital key(s) of the user and also key material for every vehicle for which the user currently has a digital key. The vehicle key material comes in a signed and encrypted piece of data called blob.
+      A blob may contain digital keys for more than just one user. This means if the digital keys for one user are changed, the vehicle blob and thus the keyring of one or more other users may be updated as well.
+      As a consequence, one vehicleAccessGranted (or Revoked) event may result in several keyringUpdated events coming back from the HSM system.
+      The external system needs to ensure to forward all updated keyrings to the respective users.
+
+    # Time formats
+
+      - All times exchanged over this interface shall be based on UTC (Coordinated Universal Time).
+      - All strings representing times shall be formatted according to ISO8601.
+
+    # Event correlation IDs
+
+      - Event correlation IDs enable tracking of all actions performed within the processing systems which are related to one event.
+      - If generation of an event is a direct result of a received event, then the generator shall use the correlationID of the received event. That way, chains of events can be tracked throughout the system.
+      - There are two options where the correlation ID can be generated.
+        1) The recommended option is that the source of an event generates a unique correlation ID and passes it to the event handler as part of the event body.
+        2) Alternatively, the event source may choose to not generate a correlation ID when passing the event to the event handler. In this case, the event handler itself generates a unique correlation ID for the event.
+      - To enable option 2, the correlation ID is defined as optional.
+      - In any case, the correlation ID is returned in the body of the event response. Thus the event source can make use of the correlation ID even in case it does not generate one.
+
+    # HTTP Status Codes:
+    
+      - Unknown event types are accepted by the event handler and 200 is returned. But they will not be processed as no receiver has subscribed to the event type.
+      - Known event type with not matching payload is accepted by the event handler and 200 is returned. But the receiver which has subscribed to the event type will generate an error event due to the broken payload.
+      - In case 40x HTTP errors are returned, the response body is empty (no correlation ID is returned).
+
+    | Http Code | Description | Information |
+    | :---         |     :---      |     :---      |
+    | 200 | Success - event was received & persisted | event not necessarily processed successfully |
+    | 400 | Bad Request - broken header or incorrect json |may include subCode |
+    | 401 | Unauthorized - Client certificate missing or invalid | may include subCode |
+    | 403 | Forbidden - Client identified by certificate not authorized to post this event | may include subCode |
+    | 404 | Not Found - route suffixed with unknown resource | may include subCode |
+    | 500 | Internal Server Error | |
+    | 503 | Service Unavailable | |
+
+    # Failure handling
+
+      This page specifies under which circumstances the HSM vehicle access API shall trigger failure events.
+      This specification does not include failures that are already handled by the Event Handler and notified via HTTP error codes.
+      So this speciifcation assumes that the generic structure of the received event is correct and the event payload is at least correct JSON.
+      Events with a name "<Incoming_Event>Failed" indicate structural issues in the event payload.
+      Events with a name that relates to an outgoing event indicate that generation of the outgoing event was initiated but an error occurred during the processing.
+      In case more than one failure occurs in the same event, only the first detected failure is reported.
+
+    | Event sent to HSM API    | Issue                                           | Resulting failure event        | Included failure reason                                 |
+    |--------------------------|-------------------------------------------------|--------------------------------|---------------------------------------------------------|
+    | huf.vehicleAccessGranted | vehicleAccessGrantId missing                    | huf.vehicleAccessGrantedFailed | vehicleAccessGrantId missing                            |
+    | huf.vehicleAccessGranted | vehicleAccessGrantId empty or no UUID           | huf.vehicleAccessGrantedFailed | vehicleAccessGrantId empty or no UUID                   |
+    | huf.vehicleAccessGranted | externalUserRef missing                         | huf.vehicleAccessGrantedFailed | externalUserRef missing                                 |
+    | huf.vehicleAccessGranted | externalUserRef empty string                    | huf.vehicleAccessGrantedFailed | externalUserRef is not allowed to be empty              |
+    | huf.vehicleAccessGranted | externalVehicleRef missing                      | huf.vehicleAccessGrantedFailed | externalVehicleRef missing                              |
+    | huf.vehicleAccessGranted | externalVehicleRef empty string                 | huf.vehicleAccessGrantedFailed | externalVehicleRef is not allowed to be empty           |
+    | huf.vehicleAccessGranted | startTime missing                               | huf.vehicleAccessGrantedFailed | startTime missing                                       |
+    | huf.vehicleAccessGranted | startTime empty string or format not recognized | huf.vehicleAccessGrantedFailed | startTime empty or format not recognized                |
+    | huf.vehicleAccessGranted | endTime missing                                 | huf.vehicleAccessGrantedFailed | endTime missing                                         |
+    | huf.vehicleAccessGranted | endTime empty string or format not recognized   | huf.vehicleAccessGrantedFailed | endTime empty or format not recognized                  |
+    | huf.vehicleAccessGranted | startTime and endTime in the past               | huf.keyringUpdateFailed        | start and end time in the past                          |
+    | huf.vehicleAccessGranted | endTime before startTime                        | huf.keyringUpdateFailed        | endTime before startTime                                |
+    | huf.vehicleAccessGranted | externalVehicleRef not found                    | huf.keyringUpdateFailed        | externalVehicleRef not found (vehicle \<id\> not commissioned) |
+    | huf.vehicleAccessGranted | Internal processing failure                     | huf.keyringUpdateFailed        | Updating keyring failed - please contact HSM support    |
+    |                          |                                                 |                                |                                                         |
+    | huf.vehicleAccessRevoked | vehicleAccessGrantId missing                    | huf.vehicleAccessRevokedFailed | vehicleAccessGrantId missing                            |
+    | huf.vehicleAccessRevoked | vehicleAccessGrantId empty or no UUID           | huf.vehicleAccessRevokedFailed | vehicleAccessGrantId empty or no UUID                   |
+    | huf.vehicleAccessRevoked | vehicleAccessGrantId not found                  | huf.keyringUpdateFailed        | vehicleAccessGrantId not found                          |
+    | huf.vehicleAccessRevoked | Internal processing failure                     | huf.keyringUpdateFailed        | Updating keyring failed - please contact HSM support    |
+    

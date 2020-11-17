@@ -1,0 +1,40 @@
+get:
+  tags: 
+   - approved
+  summary: Retrieve latest vehicle meta data (odometer and fuel level) before specific point in time.
+  description: | 
+      ## "time" query parameter optional
+      The "time" query parameter can be omitted, without it "now" is assumed and the latest values are returned. When it is given, the latest values *before* the given time are returned.
+      ## Status elements
+      - The response of this call contains 0-n status elements, each with timestamp and unit. 
+      - Which elements are included depends on:
+        - Which status data is generally supported by the specific vehicle
+        - Which of the supported data could be retrieved from the vehicle
+      - The overall list of supported status elements is specified in a separate document
+      ## Rate limiting
+      This request is rate limited in a suitable way, to avoid performance problems due to excessive polling.
+  operationId: vehicles/{externalVehicleRef}/status
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: tenantId
+      in: query
+      type: string
+      required: false
+    - name: time
+      in: query
+      type: string
+      required: false
+  responses:
+    Response body with data:
+      $ref: "../../swagger.yaml#definitions/getMetaDataRsp"
+    Response body when no data is available for vehicle:
+      $ref: "../../swagger.yaml#definitions/getMetaDataRspNoData"

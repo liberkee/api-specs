@@ -1,0 +1,26 @@
+description: ""
+type: "object"
+properties: 
+  commandType: 
+    type: "string"
+    minLength: 1
+  correlationId:
+    type: "string"
+    minLength: 1
+  commandPayload: 
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/commandPayload"
+
+required:
+  - commandType
+  - commandPayload
+
+example:
+  commandType: "huf.operateVehicle"
+  correlationId: "bedaca85-555d-4a84-b9c2-9ca54e4d7d75"
+  commandPayload:
+    externalVehicleRef: "1234"
+    tenantId: "FooRental"
+    commands:
+          -
+            command: "lock"

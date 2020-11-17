@@ -1,0 +1,39 @@
+swagger: "2.0"
+info:
+  version: "1.2.0"
+  title: SixSense Cloud API - List of supported status elements
+  license:
+    name:  Huf Proprietary
+  description: |
+
+      ![Brand Logo](./images/sixsense.png)
+
+      # Changelog
+
+      ## 1.2.0
+
+        Added camSupplyVoltage.
+
+      ## 1.1.0
+
+        Added ignition status.
+
+      ## 1.0.0
+        Approved after review.
+
+      ## 0.0.1
+        Initial draft for review.
+
+      # Status elements
+
+      This document lists the supported status elements used in the vehicle status API.
+
+      | Name | Unit |
+      | :---         |     :---      |
+      | fuelLevelAbsolute | liter |
+      | fuelLevelRelative | percent |
+      | odometer | meter |
+      | ignition | boolean |
+      | camSupplyVoltage | Volt
+
+

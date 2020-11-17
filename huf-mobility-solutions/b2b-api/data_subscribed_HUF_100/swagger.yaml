@@ -1,0 +1,124 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: SixSense Cloud API - data subscription HUF
+  license:
+    name:  Huf Proprietary
+  description: |
+
+      ![Brand Logo](./images/sixsense.png)
+
+      ![States Image](./images/pic_huf.jpg)
+
+      # Purpose of the subscribe data API
+
+        The SixSense Cloud API allows access to all sorts of vehicle related data, e.g. fuel level, odometer and position. The most basic way for API clients to access this data are GET routes in the "vehicle status" and "vehicle telematics" APIs.
+
+        However, this is not very efficient in case frequent data updates are required by the client. One example use case is real-time tracking of the vehicle position.
+
+        For such use cases, this API allows the client to subscribe to vehicle data updates. The SixSense Cloud API then publishes a stream of data updates to the subscriber.
+
+        The API also allows to unsubscribe once the data updates are not needed anymore.
+
+      # Changelog
+
+      ## 0.0.1
+        Initial draft for review.
+
+      # Mandatory/optional fields
+        - In this specification, all mandatory data fields are marked with a red asterisk character ('*').
+        - All other data fields are optional.
+
+      # HTTP Status Codes:
+
+        - Unknown event types are accepted by the event handler and 200 is returned. But they will not be processed as no receiver has subscribed to the event type.
+        - Known event type with not matching payload is accepted by the event handler and 200 is returned. But the receiver which has subscribed to the event type will generate an error event due to the broken payload.
+        - In case 40x HTTP errors are returned, the response body is empty (no correlation ID is returned).
+
+      | Http Code | Description | Information |
+      | :---         |     :---      |     :---      |
+      | 200 | Success | |
+      | 400 | Bad Request | |
+      | 403 | Forbidden - Client identified by certificate not authorized to call this request | |
+      | 404 | Not Found - externalVehicleRef not found or route suffixed with unknown resource | |
+      | 500 | Internal Server Error | |
+      | 503 | Service Unavailable | Due to a 3rd party component, this is also returned when the client certificate is missing or invalid. |
+
+      # Failure handling
+
+        This section specifies under which circumstances the EXTERNAL devices API shall trigger failure events.
+        This specification does not include failures that are already handled by the Event Handler and notified via HTTP error codes.
+        So this speciifcation assumes that the generic structure of the received event is correct and the event payload is at least correct JSON.
+        In case more than one failure occurs in the same event, only the first detected failure is reported.
+        The failure reason field contains a string that describes the failure cause.
+
+      ## Format failures
+
+      In case of mismatches with the specified event format, the failure reasons are not specified in detail, as they may be provided by a validation library. Exact failure reason strings may change when changing or updating such a library.
+
+      If there is a format failure in an "Event", the resulting failure event shall be of type "EventFailed".
+
+      ## Processing failures
+
+      For events with correct format, failures can still occur while processing the event. This table lists the failure reasons for the applicable processing failures.
+
+      | Event sent to HUF API          | Issue                                                  | Resulting failure event              | Failure reason | Comment
+      |--------------------------------|--------------------------------------------------------|------------------------|------------------------------|--------------
+      | huf.vehicleSubscribed          | externalVehicleRef not found        | huf.vehicleSubscribedFailed | "externalVehicleRef not found for given tenant (vehicle not commissioned)" | The actual tenantId and externalVehicleRef is captured in the failure details.
+      | huf.vehicleSubscribed          | interval below our minimum        | huf.vehicleSubscribedFailed | "interval \<interval\> below our minimum of \<configured interval\>" |
+      | huf.vehicleSubscribed          | subscribed event unknown        | huf.vehicleSubscribedFailed | "\“subscribeTo\” with value \“event\” fails to match the supported eventTypes pattern" |
+      | huf.vehicleSubscribed          | internal processing error  | huf.vehicleSubscribedFailed        | "internal processing error"
+      | huf.vehicleUnsubscribed        | externalVehicleRef not found        | huf.vehicleUnsubscribedFailed | "externalVehicleRef not found for given tenant (vehicle not commissioned)" | The actual tenantId and externalVehicleRef is captured in the failure details.
+      | huf.vehicleUnsubscribed        | unsubscribed event unknown        | huf.vehicleUnsubscribedFailed | "\unsubscribeFrom\” with value \“event\” fails to match the supported eventTypes pattern" |
+      | huf.vehicleUnsubscribed        | internal processing error  | huf.vehicleUnsubscribedFailed      | "internal processing error"
+
+      ## Recovery
+
+      Information about active subscriptions is permanently stored, so the subscribed streams will continue after a system restart. A short outage (time taken for the restart) is of course inevitable.
+
+host: '{Please request URL and port from your Huf technical contact}'
+basePath: /api/v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+#PATHS
+
+paths:
+
+## Events
+
+  /events - huf.vehicleSubscribed:
+    $ref: "./definitions/paths/events_vehicle_subscribed.yaml"
+
+  /events - huf.vehicleUnsubscribed:
+    $ref: "./definitions/paths/events_vehicle_unsubscribed.yaml"
+
+definitions:
+
+# Event types
+
+  vehicleSubscribed:
+    $ref: "./definitions/events/vehicleSubscribed.yaml"
+
+  vehicleUnsubscribed:
+    $ref: "./definitions/events/vehicleUnsubscribed.yaml"
+
+# Models
+
+  vehicleSubscribedPayload:
+    $ref: "./definitions/models/vehicleSubscribedPayload.yaml"
+
+  vehicleUnsubscribedPayload:
+    $ref: "./definitions/models/vehicleUnsubscribedPayload.yaml"
+
+  expression:
+    $ref: "./definitions/models/expression.yaml"
+
+# Responses
+
+  eventResponse:
+      $ref: "./definitions/responses/eventResponse.yaml"

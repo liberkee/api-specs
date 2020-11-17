@@ -1,0 +1,33 @@
+post:
+  tags: 
+   - approved
+  summary: Trigger digital key deletion for previously given vehicle access grant
+  description: | 
+      ## Function
+      This event shall be used to notify the Huf customer system of an access to a vehicle that was revoked from a user. As a result, the Huf customer system will update or delete the digital keyring for one or more users and provide them by sending one or more keyringUpdated events (see vehicle access EXTERNAL specification).
+      The payload parameters of this event are managed by the customer and described in the model of the event body.
+      ## Authentication
+      Client certificate provided by Huf.
+      ## Encrypted transport
+      TLS 1.2 (or higher) is mandatory to use the API.
+  operationId: events - vehicle access revoked
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/vehicleAccessRevoked"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

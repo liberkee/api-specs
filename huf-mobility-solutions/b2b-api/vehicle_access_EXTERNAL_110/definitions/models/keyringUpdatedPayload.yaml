@@ -1,0 +1,15 @@
+type: "object"
+properties:
+  externalUserRef:
+    type: "string"
+    minLength: 1
+  tacsKeyring:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/tacsKeyring"
+  keyring:
+    type: "object"
+    
+required:
+  - externalUserRef
+  - keyring
+  - tacsKeyring

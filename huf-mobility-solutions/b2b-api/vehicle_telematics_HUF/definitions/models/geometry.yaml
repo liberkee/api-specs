@@ -1,0 +1,13 @@
+description: ""
+type: "object"
+properties: 
+  type:
+    type: "string"
+    value: "Point"
+    minLength: 1
+  coordinates:
+    $ref: "../../swagger.yaml#definitions/point2D"
+ 
+required:
+  - type
+  - coordinates

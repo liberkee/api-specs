@@ -1,0 +1,30 @@
+post:
+  tags: 
+   - draft
+  summary: Subscribed data - update of vehicle status.
+  description: | 
+      ## No data persistence
+      Different from other events, this "updated" event is not persisted in the event store of the Huf customer system. However, the status data itself can be retrieved from the Huf customer system also for past timestamps by using the appropriate GET route.
+      ## Separate fuel level and odometer updates
+      It is not guaranteed that fuel level and odometer values are both present in all status updates. Fuel level and odometer values may be notified in separate status updates.
+  operationId: events - vehicle status updated
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/vehicleStatusUpdated"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

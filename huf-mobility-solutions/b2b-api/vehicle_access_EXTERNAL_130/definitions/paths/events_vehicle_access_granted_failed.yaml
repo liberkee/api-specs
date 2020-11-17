@@ -1,0 +1,28 @@
+post:
+  tags: 
+   - approved
+  summary: Post vehicle access granted failure info
+  description: | 
+      ## Vehicle doors access failed
+      This event is also returned in case a vehicleDoorsAccessGranted failed. There is no separate failed event for that.
+  operationId: events - vehicle access granted failed
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/vehicleAccessGrantedFailed"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

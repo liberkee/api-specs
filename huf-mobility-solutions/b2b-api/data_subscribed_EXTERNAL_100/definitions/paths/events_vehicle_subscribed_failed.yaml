@@ -1,0 +1,26 @@
+post:
+  tags: 
+   - draft
+  summary: Notify failure of vehicleSubscribed event.
+  description: | 
+  operationId: events - vehicle subscribed failure
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/vehicleSubscribedFailed"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

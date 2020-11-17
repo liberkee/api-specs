@@ -1,0 +1,38 @@
+type: "object"
+properties:
+  vehicleAccessGrantId:
+    description: "Unique ID that identifies one specific grant"
+    type: "string"
+    minLength: 1
+    format: "UUID (RFC4122)"
+  forwardTo:
+    description: "Describes entity which will use the generated key"
+    type: "string"
+    minLength: 1
+  externalUserRef:
+    description: "Reference to the user object as used in the external booking system"
+    type: "string"
+    minLength: 1
+  tenantId:
+    description: "Optional ID specifying the tenant the vehicle belongs to"
+    type: "string"
+    minLength: 1
+  externalVehicleRef:
+    description: "Reference to the vehicle object as used in the external booking system"
+    type: "string"
+    minLength: 1
+  startTime:
+    description: "The grant is valid from the startTime"
+    type: "string"
+    minLength: 1
+  endTime:
+    description: "The grant is valid from the endTime"
+    type: "string"
+    minLength: 1
+
+required:
+  - vehicleAccessGrantId
+  - externalUserRef
+  - externalVehicleRef
+  - startTime
+  - endTime

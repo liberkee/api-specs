@@ -1,0 +1,9 @@
+description: ""
+type: "object"
+properties: 
+  command:
+    description: "Specifies command to be executed"
+    type: "string"
+    enum: [lock, unlock, mobilize, immobilize]
+required:
+  - command

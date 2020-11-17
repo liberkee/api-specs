@@ -1,0 +1,32 @@
+post:
+  tags: 
+   - draft
+  summary: Notify addition of an account with username / password.
+  description: | 
+      ## Authentication
+      Client certificate provided by Huf.
+      ## Encrypted transport
+      TLS 1.2 (or higher) is mandatory to use the API.
+      ## Username exists
+      Sending this event with an existing username leads to a failure. For updating the password, use the userPasswordUpdated event.
+  operationId: events - account added
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/userAccountWithPwCreated"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

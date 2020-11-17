@@ -1,0 +1,157 @@
+swagger: "2.0"
+info:
+  version: "1.1.0"
+  title: SixSense Cloud API - accounts HUF
+  license:
+    name:  Huf Proprietary
+  description: |
+
+      ![Brand Logo](./images/sixsense.png)
+
+      ![States Image](./images/pic_huf.jpg)
+
+      # Deprecated
+
+        This API shall be considered only as temporary solution. Once a proper idendity and access management (IAM) feature is available, this will not be supported anymore with the next major API update.
+
+      # Purpose of the accounts API
+
+        This API provides a simple interface to create accounts (username/password) so that  the credentials can be used for login procedures, e.g. in the Huf Service App.
+
+      # Data privacy
+
+        Usernames and passwords are sensitive personal data. Most countries regulate the handling and storage of personal data by law. The SixSense Cloud API is designed in a way that personal data of end-users is never stored, to avoid any legal issues.
+
+        This is ensured by the following:
+
+      ## Event store
+
+        Only event type and correlation ID are kept in the event store for the events in this API - not the payload, which contains personal data.
+
+        Events for which the payload is not persisted in the event store are called "referential events" and can be identified by the preceding "ref." namespace.
+
+      ## Hashing in account database
+
+        Both usernames and passwords are stored in an accounts database for login purposes. Both values are not stored in cleartext, but hashed with a salt. This means even a hacker with full access to the database cannot reconstruct usernames and passwords.
+
+        Due to the hashing, a "GET /accounts" route is NOT provided, as the cleartext usernames and passwords are not available in the system for retrieval and the hashed values are not of any use for the client.
+
+      ## Logging
+
+        Personal data like usernames or passwords do never appear in cleartext in system logs.
+
+      ## Failed events
+
+        The Failed events in this API do not contain failure details (which would contain personal data). In troubleshooting scenarios, the client can identify errored events using the correlation ID.
+
+      # Case-sensitivity
+
+        Usernames and passwords are treated case-sensitive, e.g. johns32 is a different username than Johns32.
+
+      # Changelog
+
+      ## 1.1.0
+        Added permissionList to huf.ref.userAccountWithPwCreated
+
+      ## 1.0.0
+        Initial version.
+
+      # Mandatory/optional fields
+        - In this specification, all mandatory data fields are marked with a red asterisk character ('*').
+        - All other data fields are optional.
+
+      # HTTP Status Codes:
+
+        - Unknown event types are accepted by the event handler and 200 is returned. But they will not be processed as no receiver has subscribed to the event type.
+        - Known event type with not matching payload is accepted by the event handler and 200 is returned. But the receiver which has subscribed to the event type will generate an error event due to the broken payload.
+        - In case 40x HTTP errors are returned, the response body is empty (no correlation ID is returned).
+
+      | Http Code | Description | Information |
+      | :---         |     :---      |     :---      |
+      | 200 | Success | |
+      | 400 | Bad Request | |
+      | 401 | Unauthorized | |
+      | 403 | Forbidden - Client identified by certificate not authorized to call this request | |
+      | 404 | Not Found - externalVehicleRef not found or route suffixed with unknown resource | |
+      | 500 | Internal Server Error | |
+      | 503 | Service Unavailable | |
+
+      # Failure handling
+
+        This section specifies under which circumstances the EXTERNAL devices API shall trigger failure events.
+        This specification does not include failures that are already handled by the Event Handler and notified via HTTP error codes.
+        So this speciifcation assumes that the generic structure of the received event is correct and the event payload is at least correct JSON.
+        In case more than one failure occurs in the same event, only the first detected failure is reported.
+        The failure reason field contains a string that describes the failure cause.
+
+      ## Format failures
+
+      In case of mismatches with the specified event format, the failure reasons are not specified in detail, as they may be provided by a validation library. Exact failure reason strings may change when changing or updating such a library.
+
+      If there is a format failure in an "Event", the resulting failure event shall be of type "EventFailed".
+
+      ## Processing failures
+
+      For events with correct format, failures can still occur while processing the event. This table lists the failure reasons for the applicable processing failures.
+
+      | Event sent to HUF API          | Issue                                                  | Resulting failure event              | Failure reason
+      |--------------------------------|--------------------------------------------------------|--------------------------------------|------------------------------
+      | huf.ref.userAccountWithPwCreated      | username already exists  | huf.userAccountWithPwCreatedFailed      | "username already exists"
+      | huf.ref.userAccountWithPwCreated      | internal processing error  | huf.userAccountWithPwCreatedFailed      | "internal processing error"
+      | huf.ref.userAccountDeleted    | username not found         | huf.userAccountDeletedFailed    | "username not found"
+      | huf.ref.userAccountDeleted    | internal processing error  | huf.userAccountDeletedFailed    | "internal processing error"
+      | huf.ref.userPasswordUpdated   | username not found         | huf.userPasswordUpdatedFailed   | "username not found"
+      | huf.ref.userPasswordUpdated   | internal processing error  | huf.passwordUpdatedFailed   | "internal processing error"
+
+host: HOST:PORT
+basePath: /api/v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+#PATHS
+
+paths:
+
+## Events
+
+  /events - huf.ref.userAccountWithPwCreated:
+    $ref: "./definitions/paths/events_user_account_with_pw_created.yaml"
+
+  /events - huf.ref.userAccountDeleted:
+    $ref: "./definitions/paths/events_user_account_deleted.yaml"
+
+  /events - huf.ref.userPasswordUpdated:
+    $ref: "./definitions/paths/events_user_password_updated.yaml"
+
+definitions:
+
+# Event types
+
+  userAccountWithPwCreated:
+    $ref: "./definitions/events/userAccountWithPwCreated.yaml"
+
+  userAccountDeleted:
+    $ref: "./definitions/events/userAccountDeleted.yaml"
+
+  userPasswordUpdated:
+    $ref: "./definitions/events/userPasswordUpdated.yaml"
+
+# Models
+
+  userAccountWithPwCreatedPayload:
+    $ref: "./definitions/models/userAccountWithPwCreatedPayload.yaml"
+
+  userAccountDeletedPayload:
+    $ref: "./definitions/models/userAccountDeletedPayload.yaml"
+
+  userPasswordUpdatedPayload:
+    $ref: "./definitions/models/userPasswordUpdatedPayload.yaml"
+
+# Responses
+
+  eventResponse:
+    $ref: "./definitions/responses/eventResponse.yaml"

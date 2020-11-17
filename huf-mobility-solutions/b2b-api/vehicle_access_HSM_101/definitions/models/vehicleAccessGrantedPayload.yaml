@@ -1,0 +1,24 @@
+type: "object"
+properties:
+  vehicleAccessGrantId:
+    type: "string"
+    format: "UUID (RFC4122)"
+  externalUserRef:
+    type: "string"
+    minLength: 1
+  externalVehicleRef:
+    type: "string"
+    minLength: 1
+  startTime:
+    type: "string"
+    minLength: 1
+  endTime:
+    type: "string"
+    minLength: 1
+
+required:
+  - vehicleAccessGrantId
+  - externalUserRef
+  - externalVehicleRef
+  - startTime
+  - endTime

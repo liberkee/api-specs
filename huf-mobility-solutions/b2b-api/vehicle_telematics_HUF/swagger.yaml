@@ -1,0 +1,101 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: SixSense Cloud API - vehicle telematics HUF
+  license:
+    name:  Huf Proprietary
+  description: |
+
+      ![Brand Logo](./images/sixsense.png)
+
+      ![States Image](./images/pic_huf.jpg)
+
+      # Purpose of the vehicle telematics API
+
+      This API allows the external system to retrieve highly volatile data as the current GPS position of an individual vehicle.
+
+      To retrieve slower changing data like fuel level and odometer, please refer to the separate "vehicle status" API.
+
+      # Changelog
+
+      ## 1.0.0
+        Approved after review.
+
+      ## 0.0.1
+        Initial draft for review.
+
+      # Mandatory/optional fields
+        - In this specification, all mandatory data fields are marked with a red asterisk character ('*').
+        - All other data fields are optional.
+
+      # Time formats
+
+        - All times exchanged over this interface shall be based on UTC (Coordinated Universal Time).
+        - All strings representing times shall be formatted according to ISO8601.
+
+      # Tenant IDs
+
+        - Scenario: One system is exclusively operated for one business customer. The customer may have several logical sub-organizations (e.g. car rental agencies), which are represented as tenants.
+        - In the context of *this API section*, tenantIds refer to vehicles ONLY.
+        - The tenantId is defined as optional. When left out, the tenant with the name "default" is used by the customer system.
+        - If there was no tenantId in the received event, there will also be the tenantId "default" in the resulting events.
+        - In requests with a tenantId, Huf ONLY returns and modifies vehicle data related to that tenant.
+        - When a received event results in one or more outgoing events, each outgoing event carries the same tenantId that was present in the received event.
+        - A tentant ID shall only include letters and numbers, otherwise system behavior is not guaranteed.
+          - regular expression: ^[a-zA-Z0-9]+$
+        - Tenant IDs are case-senitive, e.g. "carrental" is a different tenant than "CarRental".
+        - The following strings are reserved tenant IDs and no specific system behavior is guaranteed when they are used:
+          - all, any, none, default (in all possible lower/upper case combinations)
+
+        ![States Image](./images/tenants.jpg)
+
+      | Http Code | Description | Information |
+      | :---         |     :---      |     :---      |
+      | 200 | Success | |
+      | 400 | Bad Request | |
+      | 403 | Forbidden - Client identified by certificate not authorized to call this request | |
+      | 404 | Not Found - externalVehicleRef not found or route suffixed with unknown resource | |
+      | 500 | Internal Server Error | |
+      | 503 | Service Unavailable | Due to a 3rd party component, this is also returned when the client certificate is missing or invalid. |
+
+host: '{Please request URL and port from your Huf technical contact}'
+basePath: /api/v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+#PATHS
+
+paths:
+
+## Events
+
+  /vehicles/{externalVehicleRef}/telematics:
+    $ref: "./definitions/paths/get_vehicle_telematics.yaml"
+
+definitions:
+
+# Responses
+
+  getVehicleTelematicsRsp:
+    $ref: "./definitions/responses/getVehicleTelematicsRsp.yaml"
+
+  getVehicleTelematicsRspUnknownPos:
+    $ref: "./definitions/responses/getVehicleTelematicsRspUnknownPos.yaml"
+
+# Models
+
+  getCurrentPositionProperties:
+    $ref: "./definitions/models/getCurrentPositionProperties.yaml"
+
+  geometry:
+    $ref: "./definitions/models/geometry.yaml"
+
+  point2D:
+    $ref: "./definitions/models/point2D.yaml"
+
+  position:
+    $ref: "./definitions/models/position.yaml"

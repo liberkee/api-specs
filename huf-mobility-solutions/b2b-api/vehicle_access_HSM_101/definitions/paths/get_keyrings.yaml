@@ -1,0 +1,30 @@
+get:
+  tags: 
+   - draft
+  summary: Retrieve keyring for external user reference
+  description: | 
+      ## Authentication
+      Client certificate provided by Huf.
+      ## Encrypted transport
+      TLS 1.2 (or higher) is mandatory to use the API.
+      ## Unknown user reference
+      For unknown user references, an empty keyring structure is returned. This is needed to enable removing the last key from the user's device.
+      Empty keyring means the userLeaseTokenTable and the userSorcBlobTable hold zero elements.
+  operationId: GET /keyrings
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: externalUserRef
+      in: query
+      type: string
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/getKeyringsRsp"

@@ -1,0 +1,32 @@
+description: ""
+type: "object"
+properties: 
+  eventType: 
+    type: "string"
+    minLength: 1
+  correlationId:
+    type: "string"
+    minLength: 1
+  tenantId:
+    type: "string"
+    minLength: 1
+  eventPayload: 
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/vehicleCommissioningUpdatedFailedPayload"
+
+required:
+  - eventType
+  - eventPayload
+
+example:
+  eventType: "huf.vehicleCommissioningUpdatedFailed"
+  correlationId: "bedaca85-555d-4a84-b9c2-9ca54e4d7d75"
+  tenantId: "FooRental"
+  eventPayload:
+    failureReason: "externalVehicleRef not found."
+    failureDetails:
+      externalVehicleRef: "unknown"
+      deviceType: "cam"
+      deviceId: "4f48e9b5-247e-42b7-b435-812fb0d62d00"
+      hwSerialNumber: "3246265235"
+      state: "installed"

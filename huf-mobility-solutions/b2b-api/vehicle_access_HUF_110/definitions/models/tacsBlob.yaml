@@ -1,0 +1,15 @@
+type: "object"
+properties:
+  tenantId:
+    type: "string"
+    minLength: 1
+  externalVehicleRef:
+    type: "string"
+    minLength: 1
+  blob:
+    type: "object"
+
+required:
+  - tenantId
+  - externalVehicleRef
+  - blob

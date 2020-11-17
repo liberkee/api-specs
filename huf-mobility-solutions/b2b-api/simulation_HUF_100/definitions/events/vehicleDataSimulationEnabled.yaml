@@ -1,0 +1,25 @@
+description: ""
+type: "object"
+properties: 
+  eventType: 
+    type: "string"
+    minLength: 1
+  correlationId:
+    type: "string"
+    minLength: 1
+  eventPayload: 
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/vehicleDataSimulationEnabledPayload"
+
+required:
+  - eventType
+  - eventPayload
+
+example:
+  eventType: "huf.vehicleDataSimulationEnabled"
+  correlationId: "bedaca85-555d-4a84-b9c2-9ca54e4d7d75"
+  eventPayload:
+    externalVehicleRef: "4321"
+    tenantId: "FooRental"
+      
+    

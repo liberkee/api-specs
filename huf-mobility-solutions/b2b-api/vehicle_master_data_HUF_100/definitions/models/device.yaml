@@ -1,0 +1,16 @@
+description: ""
+type: "object"
+properties:
+  deviceType:
+    type: "string"
+    minLength: 1
+  hwSerialNumber:
+    type: "string"
+    minLength: 1
+  state:
+    type: "string"
+    minLength: 1
+
+required:
+  - deviceType
+  - state

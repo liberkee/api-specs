@@ -1,0 +1,12 @@
+type: "object"
+properties:
+  externalVehicleRef:
+    type: "string"
+    minLength: 1
+  blob:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/blob"
+
+required:
+  - externalVehicleRef
+  - blob

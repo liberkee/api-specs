@@ -1,0 +1,27 @@
+description: ""
+type: "object"
+properties: 
+  eventType: 
+    type: "string"
+    minLength: 1
+  correlationId:
+    type: "string"
+    minLength: 1
+  eventPayload: 
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/vehicleServiceEnablerUpdatedPayload"
+
+required:
+  - eventType
+  - correlationId
+  - eventPayload
+
+example:
+  eventType: "huf.vehicleServiceEnablerUpdated"
+  correlationId: "b6b03eb2-4f64-4f51-a707-a754da67587e"
+  eventPayload:
+    tenantId: "FooRental"
+    externalVehicleRef: "4321"
+    deviceType: "cam"
+    state: "installed"
+    

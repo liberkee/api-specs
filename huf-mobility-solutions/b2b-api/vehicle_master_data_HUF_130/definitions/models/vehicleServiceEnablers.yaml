@@ -1,0 +1,31 @@
+description: ""
+type: "object"
+properties:
+  tenantId:
+    type: "string"
+    minLength: 1
+  externalVehicleRef:
+    type: "string"
+    minLength: 1
+  serviceEnablers:
+    type: "array"
+    items:
+      $ref: "../../swagger.yaml#definitions/device"
+
+required:
+  - tenantId
+  - externalVehicleRef
+  - serviceEnablers
+
+example:
+  tenantId: 'FooRental'
+  externalVehicleRef: '4321'
+  serviceEnablers:
+      -
+        deviceType: "cam"
+        hwSerialNumber: "14513212446"
+        state: "installed"
+      -
+        deviceType: "keyHolder"
+        hwSerialNumber: "2435234154"
+        state: "installed"

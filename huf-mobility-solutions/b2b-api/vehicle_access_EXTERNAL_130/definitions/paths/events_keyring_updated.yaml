@@ -1,0 +1,37 @@
+post:
+  tags: 
+   - approved
+  summary: Post updated keyring for external user reference
+  description: | 
+      ## Empty keyring
+      For a user reference that does not have a grant, the keyrings in the event payload are empty.
+      ## Key Holder ID
+      If a vehicle is commissioned with a key holder, and a user is granted access to the vehicle, then the key holder ID will be present in tacsKeyring. The key holder ID is exactly the ID that the key holder device advertises. It is a 16 byte value encoded in hexadecimal. This same 16 byte value is (base64 encoded) also printed on the key holder label as serial number (S/N). By scanning for this ID, the information about a present or absent key can be used in the business logic.
+      For vehicles without key holder, the ID is absent.
+  operationId: events - keyring updated
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/keyringUpdated"
+    - name: EventBody empty keyrings
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/keyringUpdatedEmpty"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

@@ -1,0 +1,41 @@
+type: "object"
+properties:
+  leaseId:
+    type: "string"
+    minLength: 1
+  userId:
+    type: "string"
+    minLength: 1
+  sorcId:
+    type: "string"
+    minLength: 1
+  serviceGrantList:
+    type: array
+    items:
+      $ref: "../../swagger.yaml#definitions/serviceGrant"
+  leaseTokenDocumentVersion:
+    type: "string"
+    minLength: 1
+  leaseTokenId:
+    type: "string"
+    minLength: 1
+  sorcAccessKey:
+    type: "string"
+    minLength: 1
+  startTime:
+    type: "string"
+    minLength: 1
+  endTime:
+    type: "string"
+    minLength: 1
+
+required:
+  - leaseId
+  - userId
+  - sorcId
+  - serviceGrantList
+  - leaseTokenDocumentVersion
+  - leaseTokenId
+  - sorcAccessKey
+  - startTime
+  - endTime

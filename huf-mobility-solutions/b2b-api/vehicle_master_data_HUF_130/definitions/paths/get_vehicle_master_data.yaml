@@ -1,0 +1,25 @@
+get:
+  tags: 
+   - approved
+  summary: Get master data of one vehicle.
+  description: | 
+  operationId: vehicles/{externalVehicleRef}/masterData
+  parameters:
+    - name: Accept
+      in: header
+      description: "Accept: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: tenantId
+      in: query
+      type: string
+  responses:
+    Response body (200 OK):
+      $ref: "../../swagger.yaml#definitions/vehicleMasterData"
+    Response body (404 Not Found):
+      $ref: "../../swagger.yaml#definitions/vehicleMasterData404"

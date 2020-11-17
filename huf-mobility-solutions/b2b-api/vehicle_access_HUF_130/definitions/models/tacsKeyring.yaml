@@ -1,0 +1,14 @@
+type: "object"
+properties:
+  tacsLeaseTokenTable:
+    type: array
+    items:
+      $ref: "../../swagger.yaml#definitions/tacsLeaseToken"
+  tacsSorcBlobTable:
+    type: array
+    items:
+      $ref: "../../swagger.yaml#definitions/tacsBlob"
+
+required:
+  - tacsLeaseTokenTable
+  - tacsSorcBlobTable

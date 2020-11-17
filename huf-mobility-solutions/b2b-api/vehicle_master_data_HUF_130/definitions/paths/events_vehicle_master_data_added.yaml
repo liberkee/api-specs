@@ -1,0 +1,35 @@
+post:
+  tags: 
+   - approved
+  summary: Notify that master data of a vehicle was added which shall be equipped with SixSense.
+  description: | 
+      ## externalVehicleRef format
+      There are GET routes in which the externalVehicleRef appears in the URL. Therefore, the externalVehicleRef must not contain special characters which are not allowed in URLs. Also the "/" character shall not be part of an externalVehicleRef, as it has semantics when it appears in a URL.
+      ## Unknown externalVehicleRef
+      Receiving this event with an unknown externalVehicleRef is not an error. As adding the master data of a vehicle is a pre-requisite for the mobile app based installation, it is a normal case that the externalVehicleRef is not known at this point.
+      ## Field usage
+      The Huf Service App will display at least the following fields for vehicle identification when available: vin, brand, model.
+      The additionalProperties are key value pairs, which can be used freely by the customer, but "name" keys are expected to be unique - system behavior is not guaranteed when the same "name" key appears more than once.
+      ## Huf Vehicle Type ID
+      The Huf Vehicle Type ID (HVTID) identifies a vehicle type with enough detail so that the correct CAM configuration files for a vehicle of this type can be selected. For every supported vehicle type, Huf will provide the corresponding HVTID to you. Note that the standardized Vehicle Identification Number (VIN) contains similar information, but is not detailed and reliable enough for our purpose.
+  operationId: events - vehicle master data added
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/vehicleMasterDataAdded"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

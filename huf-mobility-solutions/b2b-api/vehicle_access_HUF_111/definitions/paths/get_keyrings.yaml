@@ -1,0 +1,35 @@
+get:
+  tags: 
+   - approved
+  summary: Retrieve keyring for external user reference
+  description: | 
+      ## Authentication
+      Client certificate provided by Huf.
+      ## Encrypted transport
+      TLS 1.2 (or higher) is mandatory to use the API.
+      ## Responses without grant
+      For a user reference that does not have a grant, an empty JSON body { } is returned.
+      Error code 400 is returned when the externalUserRef is missing or empty in the request.
+  operationId: GET /keyrings
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: tenantId
+      in: query
+      type: string
+      required: false
+    - name: externalUserRef
+      in: query
+      type: string
+      required: true
+  responses:
+    Response body (200 OK):
+      $ref: "../../swagger.yaml#definitions/getKeyringsRsp"

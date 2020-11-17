@@ -1,0 +1,13 @@
+description: ""
+type: "object"
+properties: 
+  serviceGrantId:
+    type: "string"
+    minLength: 1
+  validators:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/validator"
+
+required:
+  - serviceGrantId
+  - validators

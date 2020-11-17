@@ -1,0 +1,14 @@
+type: "object"
+properties:
+  referenceLeaseTokenTable:
+    type: array
+    items:
+      $ref: "../../swagger.yaml#definitions/referenceLeaseToken"
+  referenceSorcBlobTable:
+    type: array
+    items:
+      $ref: "../../swagger.yaml#definitions/referenceBlob"
+
+required:
+  - referenceLeaseTokenTable
+  - referenceSorcBlobTable

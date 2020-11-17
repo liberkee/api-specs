@@ -1,0 +1,37 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: SixSense Cloud API - Generic API Requirements
+  license:
+    name:  Huf Proprietary
+  description: |
+
+      ![Brand Logo](./images/sixsense.png)
+
+      # Changelog
+
+      ## 1.0.0
+        Initial version, centralized generic requirements from other API sections here.
+
+      # Generic API Requirements
+
+      ## Encrypted transport
+      TLS 1.2 (or higher) is mandatory to communicate with the TACS API.
+      ## TACS API Authentication
+      Client certificate provided by Huf.
+      ## External API Authentication
+      To be specified by external API provider. Huf recommendation is minimum HTTP Basic Auth. A higher level of security can be achieved by using client certificates or auth tokens.
+      ## Server Name Indication (SNI)
+      The external system's https client shall support SNI.
+      This can be ensured by using at least the following version of one of these popular programming languages:
+      - Java 8
+      - Python 2.7.9rc1 or 3.2alpha4
+      - Ruby 2.0
+      - PHP 5.3
+      - Go 1.4
+      - Erlang r17
+      - Perl 1.56
+
+
+
+

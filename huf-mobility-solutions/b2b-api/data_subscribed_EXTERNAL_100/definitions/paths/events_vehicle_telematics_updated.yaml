@@ -1,0 +1,28 @@
+post:
+  tags: 
+   - draft
+  summary: Subscribed data - update of vehicle telematics.
+  description: | 
+      ## No data persistence
+      Different from other events, this "updated" event is not persisted in the event store of the Huf customer system. However, the telematics data itself can be retrieved from the Huf customer system also for past timestamps by using the appropriate GET route.
+  operationId: events - vehicle telematics update
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/vehicleTelematicsUpdated"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

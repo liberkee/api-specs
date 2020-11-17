@@ -1,0 +1,8 @@
+type: "object"
+properties:
+  failureReason:
+    type: "string"
+    minLength: 1
+
+required:
+  - failureReason

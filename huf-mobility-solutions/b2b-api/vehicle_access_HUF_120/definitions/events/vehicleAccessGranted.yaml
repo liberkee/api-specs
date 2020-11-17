@@ -1,0 +1,27 @@
+description: ""
+type: "object"
+properties: 
+  eventType: 
+    type: "string"
+    minLength: 1
+  correlationId:
+    type: "string"
+    minLength: 1
+  eventPayload: 
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/vehicleAccessGrantedPayload"
+
+required:
+  - eventType
+  - eventPayload
+
+example:
+  eventType: "huf.vehicleAccessGranted"
+  correlationId: "bedaca85-555d-4a84-b9c2-9ca54e4d7d75"
+  eventPayload: 
+    vehicleAccessGrantId: "53f19856-493b-48ec-be79-09a5a31243a3"
+    externalUserRef: "4321"
+    tenantId: "FooRental"
+    externalVehicleRef: "1234"
+    startTime: "2018-06-07T12:45:00.000Z"
+    endTime: "2018-06-10T12:45:00.000Z"

@@ -1,0 +1,12 @@
+get:
+  tags:
+    - api
+  summary: Get healthcheck information
+  description: |
+    Can be used for kubernetes healthcheck
+  operationId: getHealthz
+  responses:
+    "204":
+      description: No Content
+    "500":
+      description: Internal Server Error

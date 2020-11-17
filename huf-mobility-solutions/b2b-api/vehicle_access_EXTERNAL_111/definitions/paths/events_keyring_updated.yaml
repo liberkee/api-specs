@@ -1,0 +1,38 @@
+post:
+  tags: 
+   - approved
+  summary: Post updated keyring for external user reference
+  description: | 
+      ## Authentication
+      To be specified by external API provider. Huf recommendation is minimum HTTP Basic Auth. A higher level of security can be achieved by using client certificates or auth tokens.
+      ## Encrypted transport
+      TLS 1.2 (or higher) is mandatory to use the API.
+      ## Empty keyring
+      For a user reference that does not have a grant, the keyrings in the event payload are empty.
+  operationId: events - keyring updated
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/keyringUpdated"
+    - name: EventBody empty keyrings
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/keyringUpdatedEmpty"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

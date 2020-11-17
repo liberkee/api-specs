@@ -1,0 +1,22 @@
+description: ""
+type: "object"
+properties: 
+  eventType: 
+    type: "string"
+    minLength: 1
+  correlationId:
+    type: "string"
+    minLength: 1
+  eventPayload: 
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/vehicleAccessRevokedPayload"
+
+required:
+  - eventType
+  - eventPayload
+
+example:
+  eventType: "huf.vehicleAccessRevoked"
+  correlationId: "bedaca85-555d-4a84-b9c2-9ca54e4d7d75"
+  eventPayload:
+    vehicleAccessGrantId: "53f19856-493b-48ec-be79-09a5a31243a3"

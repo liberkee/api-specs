@@ -1,0 +1,40 @@
+post:
+  tags: 
+   - draft
+  summary: Notify vehicle subscribed event.
+  description: | 
+      ## Separate endpoint for subscribed data
+      The Huf customer system supports configuration of a separate endpoint that receives the subscribed data. But it can also be the same as the endpoint that receives the other events.
+      ## Data types
+      Currently support data types are "huf.vehicleStatusUpdated" (includes fuel level relative/absolute and odometer) and "huf.vehicleTelematicsUpdated" (position). 
+      More fine-grained data types, e.g. odometer alone: to be investigated.
+      ## Subscriptions
+      Per vehicle, only one subscription per data type is possible. If a subscription exists for a vehicle and data type, and a vehicleSubscribed event is received for the same vehicle and data type, then the new subscription replaces the existing one (e.g. updates the interval).
+      ## Expression
+      Expressions allow to define more complex subscriptions, e.g. AND/OR combinations of different data types. Details tbd.
+      ## Interval
+      The interval field defines how often values in the subscribed data stream are transmitted. Unit is seconds. The system configuration includes a default value (per data type, used when the field is left open). 
+      The system configuration also includes a minimum value per data type. This ensures the system is not overloaded by too small intervals.
+      Irrespective of the subscribed interval, values are only transmitted when the data content has changed. E.g. when a vehicle is parked, the system will not transmit the same location over and over again. So the interval can be considered a minimum interval at which data is transmitted.
+
+  operationId: events - vehicle subscribed
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/vehicleSubscribed"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

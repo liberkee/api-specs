@@ -1,0 +1,44 @@
+get:
+  tags: 
+   - approved
+  summary: Retrieve latest vehicle telematics data (geo location).
+  description: | 
+      ## GeoJSON
+      Vehicle positions are represented according to the GeoJSON format. The first two coordinate elements are longitude and latitude, or easting and northing, precisely in that order and using decimal numbers.
+      Note that Google uses coordinates in reversed order.
+      See RFC7946 for more details.
+      ## Sigma
+      Radius expressing the accuracy of the position information. Its unit is meters. The lower the value, the higher is the accuracy of the position.
+      It is the sigma of the variance of the assumed normal distribution describing the uncertainty of the measured location,e.g. 68% of measurements are within this radius (in short: 'wobbliness').
+      Absence of the Sigma field means it could not be determined for the given timestamp.
+      ## Unknown position
+      If no valid data for the vehicle's position is available, the position object in the response will not be present.
+      ## SixSense Tracking privacy
+      When the SixSense service "Tracking Privacy" is activated, no vehicle position is reported, when there is a valid digital key issued for the vehicle (i.e. it is potentially in use by an end-customer).
+      ## "time" query parameter optional
+      The "time" query parameter can be omitted, without it "now" is assumed and the latest values are returned. When it is given, the latest values *before* the given time are returned.
+      ## Rate limiting
+      This request is rate limited in a suitable way, to avoid performance problems due to excessive polling.
+  operationId: vehicles/{externalVehicleRef}/telematics
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: tenantId
+      in: query
+      type: string
+      required: false
+    - name: time
+      in: query
+      type: string
+      required: false
+  responses:
+    Response body known position:
+      $ref: "../../swagger.yaml#definitions/getVehicleTelematicsRsp"

@@ -1,0 +1,24 @@
+description: ""
+type: "object"
+properties: 
+  type:
+    type: "string"
+    value: 'Feature'
+    minLength: 1
+  properties:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/getCurrentPositionProperties"
+  geometry:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/geometry"
+
+required:
+  - type
+  - properties
+  - geometry
+
+example:
+  type: 'Feature'
+  properties:
+    externalVehicleRef: '4321'  
+  geometry: null

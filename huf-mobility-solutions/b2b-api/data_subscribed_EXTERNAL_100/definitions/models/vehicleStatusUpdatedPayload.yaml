@@ -1,0 +1,22 @@
+description: ""
+type: "object"
+properties: 
+  externalVehicleRef: 
+    type: "string"
+    minLength: 1
+  tenantId: 
+    type: "string"
+    minLength: 1
+  statusElement1:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/metaData"
+  statusElement2:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/metaData"
+  statusElement3:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/metaData"
+
+required:
+  - externalVehicleRef
+  

@@ -1,0 +1,23 @@
+description: ""
+type: "object"
+properties:
+  commissionedDevices:
+    type: "array"
+    items:
+      $ref: "../../swagger.yaml#definitions/device"
+
+required:
+  - commissionedDevices
+
+example:
+  commissionedDevices:
+      -
+        deviceType: "cam"
+        deviceId: "272bf731-2de7-4f19-b67e-aae3bd34a72c"
+        hwSerialNumber: "14513212446"
+        state: "installed"
+      -
+        deviceType: "keyHolder"
+        deviceId: "6a6c481a-c385-440d-b7b8-fc81b68ecf00"
+        hwSerialNumber: "2435234154"
+        state: "installed"

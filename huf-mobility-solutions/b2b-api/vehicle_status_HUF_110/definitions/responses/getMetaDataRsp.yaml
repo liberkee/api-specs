@@ -1,0 +1,41 @@
+description: ""
+type: "object"
+properties: 
+  tenantId:
+    type: "string"
+    minLength: 1
+  externalVehicleRef:
+    type: "string"
+    minLength: 1
+  statusElement1:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/metaData"
+  statusElement2:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/metaData"
+  statusElement3:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/metaData"
+
+required:
+  - externalVehicleRef
+
+example:
+  tenantId: 'FooRental'
+  externalVehicleRef: '4321'
+  fuelLevelAbsolute:
+    timestamp: '2018-07-18T08:19:11.650Z'
+    value: '27'
+    unit: 'liter'
+  fuelLevelRelative:
+    timestamp: '2018-07-18T08:19:12.440Z'
+    value: '33'
+    unit: 'percent'
+  odometer:
+    timestamp: '2018-07-18T08:19:25.764Z'
+    value: '15432215'
+    unit: 'meter'
+  ignition:
+    timestamp: '2018-07-18T08:19:23.764Z'
+    value: 'true'
+    unit: 'boolean'

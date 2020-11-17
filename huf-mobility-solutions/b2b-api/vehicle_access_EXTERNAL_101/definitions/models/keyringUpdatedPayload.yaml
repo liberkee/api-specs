@@ -1,0 +1,12 @@
+type: "object"
+properties:
+  externalUserRef:
+    type: "string"
+    minLength: 1
+  keyring:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/keyring"
+
+required:
+  - externalUserRef
+  - keyring

@@ -1,0 +1,37 @@
+post:
+  tags: 
+   - approved
+  summary: Trigger digital key creation for user & vehicle
+  description: | 
+      ## Function
+      This event shall be used to notify the Huf customer system of an access to a vehicle that was granted to a user. As a result, the Huf customer system will create or update the digital keyring for one or more users and provide them by sending one or more keyringUpdated events (see vehicle access EXTERNAL specification).
+      The payload parameters of this event are managed by the customer and described in the model of the event body.
+      ## Number of simultaneous digital keys
+      The number of simultaneously valid (not expired) digital keys for one vehicle must not exceed 25. Make sure that keys which are not needed anymore are revoked in a timely manner. With a higher number of keys, correct system behavior cannot be guaranteed.
+      ## vehicleAccessGrantId
+      This ID shall be unique for every new access grant. When the same ID is used a second time, the system will return a failure.
+      ## externalVehicleRef format
+      There are GET routes in which the externalVehicleRef appears in the URL. Therefore, the externalVehicleRef must not contain special characters which are not allowed in URLs. Also the "/" character shall not be part of an externalVehicleRef, as it has semantics when it appears in a URL.
+      ## Number of simultaneous digital keys
+      The number of simultaneously valid (not expired) digital keys for one vehicle must not exceed 25. Make sure that keys which are not needed anymore are revoked in a timely manner. With a higher number of keys, correct system behavior cannot be guaranteed.
+  operationId: events - vehicle access granted
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/vehicleAccessGranted"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

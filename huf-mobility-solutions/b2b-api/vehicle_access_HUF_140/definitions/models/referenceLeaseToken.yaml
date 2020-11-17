@@ -1,0 +1,12 @@
+type: "object"
+properties:
+  vehicleAccessGrantId:
+    type: "string"
+    minLength: 1
+  leaseToken:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/userLeaseToken"
+
+required:
+  - vehicleAccessGrantId
+  - leaseToken

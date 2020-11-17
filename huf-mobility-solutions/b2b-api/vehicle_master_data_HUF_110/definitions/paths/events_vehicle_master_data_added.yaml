@@ -1,0 +1,35 @@
+post:
+  tags: 
+   - approved
+  summary: Notify that master data of a vehicle was added which shall be equipped with SixSense.
+  description: | 
+      ## Authentication
+      Client certificate provided by Huf.
+      ## Encrypted transport
+      TLS 1.2 (or higher) is mandatory to use the API.
+      ## Unknown externalVehicleRef
+      Receiving this event with an unknown externalVehicleRef is not an error. As adding the master data of a vehicle is a pre-requisite for the mobile app based installation, it is a normal case that the externalVehicleRef is not known at this point.
+      ## Field usage
+      The Huf Service App will display at least the following fields for vehicle identification when available: vin, brand, model, modelYear.
+      The additionalProperties are key value pairs, which can be used freely by the customer, but "name" keys are expected to be unique - system behavior is not guaranteed when the same "name" key appears more than once.
+  operationId: events - vehicle master data added
+  parameters:
+    - name: Content-Type
+      in: header
+      description: "Content Type: application/json"
+      type: string
+      default: application/json
+    - name: Accept-Language
+      in: header
+      description: LanguageCode referred to ISO 639 
+      type: string
+      default: en-EN
+    - name: EventBody
+      in: body
+      description: content of the event body
+      required: true
+      schema:
+        $ref: "../../swagger.yaml#definitions/vehicleMasterDataAdded"
+  responses:
+    Response body:
+      $ref: "../../swagger.yaml#definitions/eventResponse"

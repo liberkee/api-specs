@@ -1,0 +1,22 @@
+type: "object"
+properties:
+  userLeaseTokenTableVersion:
+    type: "string"
+    minLength: 1
+  userLeaseTokenTable:
+    type: array
+    items:
+      $ref: "../../swagger.yaml#definitions/userLTT"
+  userSorcBlobTableVersion:
+    type: "string"
+    minLength: 1
+  userSorcBlobTable:
+    type: array
+    items:
+      $ref: "../../swagger.yaml#definitions/blob"
+
+required:
+  - userLeaseTokenTableVersion
+  - userLeaseTokenTable
+  - userSorcBlobTableVersion
+  - userSorcBlobTable

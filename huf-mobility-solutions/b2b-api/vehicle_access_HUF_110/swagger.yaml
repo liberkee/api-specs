@@ -1,0 +1,210 @@
+swagger: "2.0"
+info:
+  version: "1.1.0"
+  title: SixSense Cloud API - vehicle access HUF
+  license:
+    name:  Huf Proprietary
+  description: |
+
+      ![Brand Logo](./images/sixsense.png)
+
+      ![States Image](./images/pic_huf.jpg)
+
+      # Purpose of the vehicle access API
+
+      This API allows the external system to grant and revoke the access to vehicles. As a result, the Huf customer system will generate and return per-user keyring structures ("digital key") that enable establishing a secure BLE connection between the mobile device and the vehicle.
+
+      # Changelog
+
+      ## 1.1.0
+        - Introduced tenant concept
+        - Marked “classic” key ring as deprecated and introduced more convenient “tacsKeyring” structure
+        - Simplified failure responses
+
+      ## 1.0.1
+        - Added clarifications regarding failure handling, error responses, and correlationIDs
+
+      ## 1.0.0
+        - Approved after review.
+
+      ## 0.0.1
+        - Initial draft for review.
+
+      # Mandatory/optional fields
+        - In this specification, all mandatory data fields are marked with a red asterisk character ('*').
+        - All other data fields are optional.
+
+      # Keyring principles
+        A user's keyring contains the digital key(s) of the user and also key material for every vehicle for which the user currently has a digital key. The vehicle key material comes in a signed and encrypted piece of data called blob.
+        A blob may contain digital keys for more than just one user. This means if the digital keys for one user are changed, the vehicle blob and thus the keyring of one or more other users may be updated as well.
+        As a consequence, one vehicleAccessGranted (or Revoked) event may result in several keyringUpdated events coming back from the Huf system.
+        The external system needs to ensure to forward all updated keyrings to the respective users.
+
+      # TACS keyring
+        The TACS keyring is a data structure that facilitates selecting the correct lease token and blob to be used for a specific digital vehicle key.
+        In case a user has multiple digital keys for multiple vehicles, the keyring will contain multiple lease tokens and multiple blobs.
+        To use the interface of the mobile libraries, the one lease token and one blob needs to be identified that belong to a specific vehicleAccessGrant (digital vehicle key).
+        - The TACS keyring makes this easy:
+          - The user wants to connect to a specific vehicle based on one specific booking
+          - The booking context is managed by the customer hosted system (e.g. external booking system) and needs to contain:
+            - The externalUserRef for the user who was granted the digital key
+            - The vehicleAccessGrantId that was used to request the digital key
+            - The tentantId and externalVehicleRef of the vehicle that is assigned to the booking
+          - Ensure that the tacsKeyring belongs to the externalUserRef
+          - Select the lease token labeled with the vehicleAccessGrantId
+          - Select the blob labeled with the tenantId and externalVehicleRef
+          - Use lease token and blob and input parameters for the mobile library interface to connect to the vehicle
+
+        ![States Image](./images/tacsKeyring.jpg)
+
+      # "Classic" keyring
+        - The keyring structure specified in earlier versions of the API is deprecated.
+        - It is still included in the messages to support existing implementations, but it shall not be used anymore for new implementations - use the tacsKeyring structure instead.
+        - The "classic" keyring will be completely removed from the API with the next major update.
+
+      # Time formats
+
+        - All times exchanged over this interface shall be based on UTC (Coordinated Universal Time).
+        - All strings representing times shall be formatted according to ISO8601.
+
+      # Event correlation IDs
+
+        - Event correlation IDs enable tracking of all actions performed within the processing systems which are related to one event.
+        - If generation of an event is a direct result of a received event, then the generator shall use the correlationID of the received event. That way, chains of events can be tracked throughout the system.
+        - There are two options where the correlation ID can be generated.
+          1) The recommended option is that the source of an event generates a unique correlation ID and passes it to the event handler as part of the event body.
+          2) Alternatively, the event source may choose to not generate a correlation ID when passing the event to the event handler. In this case, the event handler itself generates a unique correlation ID for the event.
+        - To enable option 2, the correlation ID is defined as optional.
+        - In any case, the correlation ID is returned in the body of the event response. Thus the event source can make use of the correlation ID even in case it does not generate one.
+
+      # Tenant IDs
+
+        - Scenario: One system is exclusively operated for one business customer. The customer may have several logical sub-organizations (e.g. car rental agencies), which are represented as tenants.
+        - In the context of *this API section*, tenantIds refer to vehicles ONLY.
+        - The tenantId is defined as optional. When left out, the tenant with the name "default" is used by the customer system.
+        - If there was no tenantId in the received event, there will also be the tenantId "default" in the resulting events.
+        - In requests with a tenantId, Huf ONLY returns and modifies vehicle data related to that tenant.
+        - When a received event results in one or more outgoing events, each outgoing event carries the same tenantId that was present in the received event.
+        - A tentant ID shall only include letters and numbers, otherwise system behavior is not guaranteed.
+          - regular expression: ^[a-zA-Z0-9]+$
+        - Tenant IDs are case-senitive, e.g. "carrental" is a different tenant than "CarRental".
+        - The following strings are reserved tenant IDs and no specific system behavior is guaranteed when they are used:
+          - all, any, none, default (in all possible lower/upper case combinations)
+
+        ![States Image](./images/tenants.jpg)
+
+      # HTTP Status Codes:
+
+        - Unknown event types are accepted by the event handler and 200 is returned. But they will not be processed as no receiver has subscribed to the event type.
+        - Known event type with not matching payload is accepted by the event handler and 200 is returned. But the receiver which has subscribed to the event type will generate an error event due to the broken payload.
+        - In case 40x HTTP errors are returned, the response body is empty (no correlation ID is returned).
+
+      | Http Code | Description | Information |
+      | :---         |     :---      |     :---      |
+      | 200 | Success - event was received & persisted | event not necessarily processed successfully |
+      | 400 | Bad Request - broken header or incorrect json |may include subCode |
+      | 401 | Unauthorized - Client certificate missing or invalid | may include subCode |
+      | 403 | Forbidden - Client identified by certificate not authorized to post this event | may include subCode |
+      | 404 | Not Found - route suffixed with unknown resource | may include subCode |
+      | 500 | Internal Server Error | |
+      | 503 | Service Unavailable | |
+
+      # Failure handling
+
+        This page specifies under which circumstances the HUF vehicle access API shall trigger failure events.
+        This specification does not include failures that are already handled by the Event Handler and notified via HTTP error codes.
+        So this speciifcation assumes that the generic structure of the received event is correct and the event payload is at least correct JSON.
+        In case more than one failure occurs in the same event, only the first detected failure is reported.
+        The failure reason field contains a string that describes the failure cause.
+
+      ## Format failures
+
+      The format failure reasons are not specified in detail, but they are human readable.
+
+      For every event with name "huf.event", the corresponding failure event has the name "huf.eventFailed".
+
+      ## Processing failures
+
+      | Event sent to HUF API    | Issue                               | Resulting failure event        | Failure reason                                            | Failure details
+      |--------------------------|-------------------------------------|--------------------------------|-----------------------------------------------------------|-------------------------------------------------------------------
+      | huf.vehicleAccessGranted | startTime and endTime in the past   | huf.vehicleAccessGrantedFailed | "start and end time in the past"                          | The actual times are captured in the failure details.
+      | huf.vehicleAccessGranted | endTime before startTime            | huf.vehicleAccessGrantedFailed | "endTime before startTime"                                | The actual times are captured in the failure details.
+      | huf.vehicleAccessGranted | externalVehicleRef not found        | huf.vehicleAccessGrantedFailed | "externalVehicleRef not found for given tenant (vehicle not commissioned)" | The actual tenantId and externalVehicleRef is captured in the failure details.
+      | huf.vehicleAccessGranted | Internal processing error           | huf.vehicleAccessGrantedFailed | "internalProcessingError"                                 |
+      |                          |                                     |                                |                                                           |
+      | huf.vehicleAccessRevoked | vehicleAccessGrantId not found      | huf.vehicleAccessRevokedFailed | "vehicleAccessGrantId not found"                          | The actual vehicleAccessGrantId is captured in the failure details.
+      | huf.vehicleAccessRevoked | Internal processing error           | huf.vehicleAccessRevokedFailed | "internalProcessingError"                                 |
+
+host: HOST:PORT
+basePath: /api/v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+#PATHS
+
+paths:
+
+## Events
+
+  /events - huf.vehicleAccessGranted:
+    $ref: "./definitions/paths/events_vehicle_access_granted.yaml"
+
+  /events - huf.vehicleAccessRevoked:
+    $ref: "./definitions/paths/events_vehicle_access_revoked.yaml"
+
+  /events - huf.keyringUpdatedFailed:
+    $ref: "./definitions/paths/events_keyring_updated_failed.yaml"
+
+  /keyrings:
+    $ref: "./definitions/paths/get_keyrings.yaml"
+
+definitions:
+
+# Event types
+
+  vehicleAccessGranted:
+    $ref: "./definitions/events/vehicleAccessGranted.yaml"
+
+  vehicleAccessRevoked:
+    $ref: "./definitions/events/vehicleAccessRevoked.yaml"
+
+  keyringUpdatedFailed:
+    $ref: "./definitions/events/keyringUpdatedFailed.yaml"
+
+# Responses
+
+  getKeyringsRsp:
+    $ref: "./definitions/responses/getKeyringsRsp.yaml"
+
+  getKeyringsRsp404:
+    $ref: "./definitions/responses/getKeyringsRsp404.yaml"
+
+  eventResponse:
+    $ref: "./definitions/responses/eventResponse.yaml"
+
+# Models
+
+  tacsBlob:
+    $ref: "./definitions/models/tacsBlob.yaml"
+
+  vehicleAccessGrantedPayload:
+    $ref: "./definitions/models/vehicleAccessGrantedPayload.yaml"
+
+  vehicleAccessRevokedPayload:
+    $ref: "./definitions/models/vehicleAccessRevokedPayload.yaml"
+
+  keyringUpdatedFailedPayload:
+    $ref: "./definitions/models/keyringUpdatedFailedPayload.yaml"
+
+  tacsKeyring:
+    $ref: "./definitions/models/tacsKeyring.yaml"
+
+  tacsLeaseToken:
+    $ref: "./definitions/models/tacsLeaseToken.yaml"
+
+  errorStatus:
+    $ref: "./definitions/models/errorStatus.yaml"

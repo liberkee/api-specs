@@ -1,0 +1,12 @@
+description: ""
+type: "object"
+properties: 
+  externalVehicleRef: 
+    type: "string"
+    minLength: 1
+  tenantId: 
+    type: "string"
+    minLength: 1
+
+required:
+  - externalVehicleRef

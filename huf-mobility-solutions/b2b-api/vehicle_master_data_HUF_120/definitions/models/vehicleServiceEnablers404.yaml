@@ -1,0 +1,14 @@
+description: ""
+type: "object"
+properties: 
+  error:
+    type: "object"
+    $ref: "../../swagger.yaml#definitions/errorStatus"
+
+required:
+  - error
+
+example:
+  error: 
+    status: "404"
+    message: "externalVehicleRef not found for given tenant (vehicle not commissioned)"

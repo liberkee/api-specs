@@ -1,0 +1,13 @@
+description: ""
+type: "object"
+properties: 
+  correlationId:
+    type: "string"
+    minLength: 1
+
+required:
+  - correlationId
+  
+example:
+  correlationId: 'b6b03eb2-4f64-4f51-a707-a754da67587e'
+  

@@ -1,0 +1,144 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: SixSense Cloud API - data subscription EXTERNAL
+  license:
+    name:  Huf Proprietary
+  description: |
+
+      ![Brand Logo](./images/sixsense.png)
+
+      ![States Image](./images/pic_external.jpg)
+
+      # Purpose of the subscribe data API
+
+        The SixSense Cloud API allows access to all sorts of vehicle related data, e.g. fuel level, odometer and position. The most basic way for API clients to access this data are GET routes in the "vehicle status" and "vehicle telematics" APIs.
+
+        However, this is not very efficient in case frequent data updates are required by the client. One example use case is real-time tracking of the vehicle position.
+
+        For such use cases, this API allows the client to receive the subscribed data stream.
+
+      # Changelog
+
+      ## 0.0.1
+        Initial draft for review.
+
+      # Mandatory/optional fields
+        - In this specification, all mandatory data fields are marked with a red asterisk character ('*').
+        - All other data fields are optional.
+
+      # HTTP Status Codes:
+
+        - Unknown event types are accepted by the event handler and 200 is returned. But they will not be processed as no receiver has subscribed to the event type.
+        - Known event type with not matching payload is accepted by the event handler and 200 is returned. But the receiver which has subscribed to the event type will generate an error event due to the broken payload.
+        - In case 40x HTTP errors are returned, the response body is empty (no correlation ID is returned).
+
+      | Http Code | Description | Information |
+      | :---         |     :---      |     :---      |
+      | 200 | Success | |
+      | 400 | Bad Request | |
+      | 403 | Forbidden - Client identified by certificate not authorized to call this request | |
+      | 404 | Not Found - externalVehicleRef not found or route suffixed with unknown resource | |
+      | 500 | Internal Server Error | |
+      | 503 | Service Unavailable | Due to a 3rd party component, this is also returned when the client certificate is missing or invalid. |
+
+      # Failure handling
+
+        This section specifies under which circumstances the EXTERNAL devices API shall trigger failure events.
+        This specification does not include failures that are already handled by the Event Handler and notified via HTTP error codes.
+        So this speciifcation assumes that the generic structure of the received event is correct and the event payload is at least correct JSON.
+        In case more than one failure occurs in the same event, only the first detected failure is reported.
+        The failure reason field contains a string that describes the failure cause.
+
+      ## Format failures
+
+      In case of mismatches with the specified event format, the failure reasons are not specified in detail, as they may be provided by a validation library. Exact failure reason strings may change when changing or updating such a library.
+
+      If there is a format failure in an "Event", the resulting failure event shall be of type "EventFailed".
+
+      ## Processing failures
+
+      For events with correct format, failures can still occur while processing the event. This table lists the failure reasons for the applicable processing failures.
+
+      | Event sent to HUF API          | Issue                                                  | Resulting failure event              | Failure reason
+      |--------------------------------|--------------------------------------------------------|------------------------|------------------------------
+      | huf.vehicleStatusUpdated       | internal processing error  | huf.vehicleStatusUpdatedFailed        | "internal processing error"
+      | huf.vehicleTelematicsUpdated     | internal processing error  | huf.vehicleTelematicsUpdatedFailed      | "internal processing error"
+
+
+host: '{Please request URL and port from your Huf technical contact}'
+basePath: /api/v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+#PATHS
+
+paths:
+
+## Events
+
+  /events - huf.vehicleStatusUpdated:
+    $ref: "./definitions/paths/events_vehicle_status_updated.yaml"
+
+  /events - huf.vehicleTelematicsUpdated:
+    $ref: "./definitions/paths/events_vehicle_telematics_updated.yaml"
+
+  /events - huf.vehicleSubscribedFailed:
+    $ref: "./definitions/paths/events_vehicle_subscribed_failed.yaml"
+
+  /events - huf.vehicleUnsubscribedFailed:
+    $ref: "./definitions/paths/events_vehicle_unsubscribed_failed.yaml"
+
+definitions:
+
+# Event types
+
+  vehicleStatusUpdated:
+    $ref: "./definitions/events/vehicleStatusUpdated.yaml"
+
+  vehicleTelematicsUpdated:
+    $ref: "./definitions/events/vehicleTelematicsUpdated.yaml"
+
+  vehicleSubscribedFailed:
+    $ref: "./definitions/events/vehicleSubscribedFailed.yaml"
+
+  vehicleUnsubscribedFailed:
+    $ref: "./definitions/events/vehicleUnsubscribedFailed.yaml"
+
+# Models
+
+  vehicleStatusUpdatedPayload:
+    $ref: "./definitions/models/vehicleStatusUpdatedPayload.yaml"
+
+  vehicleTelematicsUpdatedPayload:
+    $ref: "./definitions/models/vehicleTelematicsUpdatedPayload.yaml"
+
+  vehicleSubscribedFailedPayload:
+    $ref: "./definitions/models/vehicleSubscribedFailedPayload.yaml"
+
+  vehicleUnsubscribedFailedPayload:
+    $ref: "./definitions/models/vehicleUnsubscribedFailedPayload.yaml"
+
+  metaData:
+    $ref: "./definitions/models/metaData.yaml"
+
+  geometry:
+    $ref: "./definitions/models/geometry.yaml"
+
+  additionalProperties:
+    $ref: "./definitions/models/additionalProperties.yaml"
+
+  position:
+    $ref: "./definitions/models/position.yaml"
+
+  point2D:
+    $ref: "./definitions/models/point2D.yaml"
+
+# Responses
+
+  eventResponse:
+      $ref: "./definitions/responses/eventResponse.yaml"

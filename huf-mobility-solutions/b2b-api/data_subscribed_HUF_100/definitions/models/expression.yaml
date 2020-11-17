@@ -1,0 +1,6 @@
+description: ""
+type: "object"
+properties: 
+  interval: 
+    type: "string"
+    minLength: 1

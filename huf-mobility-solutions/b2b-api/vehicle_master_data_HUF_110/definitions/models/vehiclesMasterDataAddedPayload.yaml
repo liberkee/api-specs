@@ -1,0 +1,11 @@
+description: ""
+type: "object"
+properties:
+  addedVehiclesMasterData:
+    type: "array"
+    items:
+      $ref: "../../swagger.yaml#definitions/vehicleMasterData"
+
+required:
+  - addedVehiclesMasterData
+  
