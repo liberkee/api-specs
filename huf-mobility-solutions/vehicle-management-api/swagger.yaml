@@ -1,0 +1,412 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/hufsm/vehilce-mgmt-api/1.0.0
+info:
+  title: Huf Secure Mobile - Vehicle Management API
+  description: This API is designed to synchronize and manage the vehicles of your system that are shared with our system.
+  version: "1.0.0"
+  contact:
+    email: support@huf-sixsense.com
+  license:
+    name: Huf Secure Mobile 1.0
+    url: 'http://www.huf-sixsense.com'
+tags:
+  - name: Vehicle Management
+    description: Vehicle related actions and end points.
+  - name: Location Management
+    description: Location related actions and end points.
+paths:
+# vehicles {{{ #
+  /vehicles:
+    get:
+      summary: Get all vehicles available for the current user.
+      operationId: getVehicles
+      description: |
+        Receive all vehicle data which is available for the current user.
+
+        All vehicles of the users home location as well as all vehicles of the home locations sub-locations will be fetched by this request.
+
+        | key | description | example |
+        |-|-|-|
+        | brand | manufacturer of the vehicle | Nissan |
+        | model | vehicle model | Altima |
+        | externalVehicleRef | vehicle reference/ID which identifies the vehicle in the HSM and in the partner system/VIN can be used | 1FTFW1ET3BKD42728 |
+        | vin | vehicle identification number | 1FTFW1ET3BKD42728 |
+        | licensePlate | number plate/license plate of the vehicle | ME-HF 333 |
+        | modelYear | vehicle construction year | 2020 |
+        | location | location in which the vehicle is located | Huf Velbert |
+      responses:
+        '200':
+          description: Search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vehicles'
+        '401':
+          description: unauthorized
+      tags:
+        - Vehicle Management
+
+  /vehicle/{externalVehicleRef}:
+    get:
+      summary: Get the information for the vehicle referenced by externalVehicleRef.
+      operationId: getVehicle
+      description: |
+        Receive vehicle data for the given vehicle, referenced by your vehicle reference number.
+
+        | key | description | example |
+        |-|-|-|
+        | brand | manufacturer of the vehicle | Nissan |
+        | model | vehicle model | Altima |
+        | externalVehicleRef | vehicle reference/ID which identifies the vehicle in the HSM and in the partner system/VIN can be used | 1FTFW1ET3BKD42728 |
+        | vin | vehicle identification number | 1FTFW1ET3BKD42728 |
+        | licensePlate | number plate/license plate of the vehicle | ME-HF 333 |
+        | modelYear | vehicle construction year | 2020 |
+        | location | location in which the vehicle is located | Huf Velbert |
+      parameters:
+        - name: externalVehicleRef
+          in: path
+          description: Reference to the vehicle from your system.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 0b2734b2-0d55-4502-9b54-3d9aaafc2177
+      responses:
+        '200':
+          description: Search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+        '401':
+          description: Unauthorized.
+        '404':
+          description: Vehicle not found.
+      tags:
+        - Vehicle Management
+    put:
+      summary: Update an existing vehicle and move it from one location to another.
+      operationId: putVehicleId
+      description: |
+        Update the data of an existing vehicle or move it to a different location.                        
+      parameters:
+        - name: externalVehicleRef
+          in: path
+          description: Reference to the vehicle from your system.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 0b2734b2-0d55-4502-9b54-3d9aaafc2177
+        - name: vehicleUpdateInformation
+          in: query
+          description: Updated information for the new vehicle.
+          required: true
+          schema:
+            $ref: '#/components/schemas/VehicleUpdate'
+      responses:
+        '201':
+          description: Item updated.
+        '400':
+          description: Invalid input/required property not set.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Item not found.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleUpdate'
+        description: location data
+      tags:
+        - Vehicle Management
+    
+  /vehicle/{homeLocationId}:
+    post:
+      summary: Add a new vehicle to a location
+      operationId: postVehicleHomeLocationId
+      description: |
+        Add a new vehicle in one of the locations the current user has access to by providing the `homeLocationId` as path
+        parameter.
+
+        | key | description | example |
+        |-|-|-|
+        | brand | manufacturer of the vehicle | Nissan |
+        | model | vehicle model | Altima |
+        | externalVehicleRef | vehicle reference/ID which identifies the vehicle in the HSM and in the partner system/VIN can be used | 1FTFW1ET3BKD42728 |
+        | vin | vehicle identification number | 1FTFW1ET3BKD42728 |
+        | licensePlate | number plate/license plate of the vehicle | ME-HF 333 |
+        | modelYear | vehicle construction year | 2020 |
+      parameters:
+        - name: homeLocationId
+          in: path
+          description: ID of the home location of the new vehicle.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 0b2734b2-0d55-4502-9b54-3d9aaafc2177
+      responses:
+        '201':
+          description: Item created.
+        '400':
+          description: Invalid input/required property not set.
+        '401':
+          description: Unauthorized.
+        '409':
+          description: An item with that ID already exists.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vehicle'
+        description: Vehicle data of the new vehicle
+      tags:
+        - Vehicle Management
+# }}} vehicles #
+# Locations {{{ #
+  /locations:
+    get:
+      tags:
+        - Location Management
+      summary: Get all locations available for the current user.
+      operationId: getLocations
+      description: |
+        Receive all locations available for the current user.
+      responses:
+        '200':
+          description: Search results matching criteria.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+        '401':
+          description: unauthorized
+
+  /location/{locationId}:
+    get:
+      tags:
+        - Location Management
+      summary: Get the information about a single location.
+      operationId: getLocation
+      description: |
+        Get the information about a single location.
+      parameters:
+        - name: locationId
+          in: path
+          description: ID of the location to view.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 7e72593d-2912-484b-806e-0f57c2accb61
+      responses:
+        '200':
+          description: Search results matching criteria.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+        '401':
+          description: unauthorized
+    post:
+      tags:
+        - Location Management
+      summary: Add a new location to an existing location
+      operationId: postLocationParentLocationId
+      description: |
+        Add a new location by providing the parentLocationId as path parameter.
+
+        Leave the parameter for `parentLocationId` blank (`""`) to add a new top level location.
+      parameters:
+        - name: locationId
+          in: path
+          description: ID of the parent location to add the new location to.
+          required: true
+          schema:
+            type: string
+            example: 0
+      responses:
+        '200':
+          description: Item created, locationId returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 06750a45-0dae-4d31-9215-c4ad40995642
+        '400':
+          description: invalid input/required property not set
+        '401':
+          description: unauthorized
+        '409':
+          description: an item with that ID already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationCreate'
+        description: location data
+    put:
+      tags:
+        - Location Management
+      summary: Update an existing location.
+      operationId: putLocationLocationId
+      description: |
+        Update an existing location use the `locationID` to specify which location you want to change.                  
+      parameters:
+        - name: locationId
+          in: path
+          description: ID of the location to be updated
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 7e72593d-2912-484b-806e-0f57c2accb61
+      responses:
+        '201':
+          description: item updated
+        '400':
+          description: invalid input/required property not set
+        '401':
+          description: unauthorized
+        '409':
+          description: an item with that ID already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationUpdate'
+        description: Location data.
+# }}}  #
+components:
+  schemas:
+    Vehicle:
+      type: object
+      required:
+        - externalVehicleRef
+      properties:
+        externalVehicleRef:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        brand:
+          type: string
+          example: Nissan
+        model:
+          type: string
+          example: Altima
+        vin:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        licensePlate:
+          type: string
+          example: ME-HF 333
+        modelYear:
+          type: string
+          example: '2020'
+    VehicleUpdate:
+      type: object
+      required:
+        - externalVehicleRef
+      properties:
+        externalVehicleRef:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        brand:
+          type: string
+          example: Nissan
+        model:
+          type: string
+          example: Altima
+        vin:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        licensePlate:
+          type: string
+          example: ME-HF 333
+        modelYear:
+          type: string
+          example: '2020'
+        locationId:
+          type: string
+          format: uuid
+          example: 9b075a46-1d4b-46a3-a8ca-14c5e218054d
+    Vehicles:
+      type: object
+      required:
+        - vehicle
+        - location
+      properties:
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        location:
+          $ref: '#/components/schemas/Location'
+        equipedWith:
+          type: object
+          properties:
+            cam:
+              type: boolean
+              example: true
+            keyholder:
+              type: boolean
+              example: false
+    Location:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 6ed71e99-3c76-4512-8a45-e6103ff9a297
+        name:
+          type: string
+          example: Huf Velbert
+        city:
+          type: string
+          example: Velbert
+        country:
+          type: string
+          example: Germany
+    LocationCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Huf Velbert
+        city:
+          type: string
+          example: Velbert
+        country:
+          type: string
+          example: Germany
+    LocationUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Huf Velbert
+        city:
+          type: string
+          example: Velbert
+        country:
+          type: string
+          example: Germany
