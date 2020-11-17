@@ -1,0 +1,7 @@
+description: ""
+type: "object"
+properties:
+  rentalBookingId:
+    type: "string"
+example:
+  rentalBookingId: "9009396"

@@ -1,0 +1,87 @@
+description: "Bookings precheckout payload"
+type: object
+required:
+  - "vehicleId"
+properties:
+  vehicleId:
+    type: string
+  driver:
+    type: object
+    required:
+      - "birthDate"
+      - "givenName"
+      - "surName"
+      - "driversLicenseNumber"
+      - "driversLicenseIssueCountry"
+      - "driversLicenseExpireDate"
+    properties:
+      id:
+        type: string
+      birthDate:
+        type: string
+      givenName:
+        type: string
+      surName:
+        type: string
+      phonenumber:
+        type: string
+      email:
+        type: string
+      passportNumber:
+        type: string
+      passportExpireDate:
+        type: string
+      passportIssueCountry:
+        type: string
+      driversLicenseNumber:
+        type: string
+      driversLicenseIssueCountry:
+        type: string
+      driversLicenseExpireDate:
+        type: string
+      address:
+        type: object
+        required:
+          - "street"
+          - "streetNumber"
+          - "city"
+          - "zip"
+          - "country"
+          - "countryCode"
+        properties:
+          street:
+            type: string
+          streetNumber:
+            type: string
+          city:
+            type: string
+          zip:
+            type: string
+          county:
+            type: string
+          country:
+            type: string
+          countryCode:
+            type: string
+example:
+  vehicleId: "6458"
+  driver:
+    birthDate: "1970-01-01"
+    givenName: "Al"
+    surName: "Bundy"
+    driversLicenseNumber: "894359712"
+    driversLicenseIssueCountry: "USA"
+    driversLicenseExpireDate: "1990-02-02"
+    phonenumber: "9876543"   
+    email: "test@email.com"
+    passportNumber: "894359712"
+    passportExpireDate: "1990-02-02"
+    passportIssueCountry: "USA"
+    address:
+      street: "Steeger Strasse"
+      streetNumber: "4"
+      city: "Velbert"
+      zip: "42551"
+      county: "NRW"
+      country: "Germany"
+      countryCode: "DEU"

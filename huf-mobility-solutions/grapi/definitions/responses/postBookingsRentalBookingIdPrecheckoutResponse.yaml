@@ -1,0 +1,87 @@
+type: "object"
+required:
+  - "rentalBookingId"
+properties:
+  rentalBookingId:
+    type: "string"
+    description: Id for the checkin and of an open contract status
+  vehicle:
+    type: "object"
+    nullable: true
+    description: only available if booking is at least in state pending
+    required:
+      - "id"
+      - "name"
+      - "licensePlate"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+        description: "Given by third party system or created from brand and model information"
+      vin:
+        type: "string"
+      licensePlate:
+        type: "string"
+      images:
+        type: "array"
+        items:
+          required:
+            - "thumbnail"
+            - "path"
+          properties:
+            thumbnail:
+              type: "boolean"
+            path:
+              type: "string"
+      additionalDetails:
+        type: "object"
+        properties:
+          fuelType:
+            type: "string"
+            nullable: true
+          horsePower:
+            type: "number"
+            nullable: true
+          model:
+            type: "string"
+          yearBuilt:
+            type: "number"
+            nullable: true
+          brand:
+            type: "string"
+        required:
+          - "model"
+          - "brand"
+      damageReportImage:
+        type: string
+      damageReports:
+        type: array
+        items:
+          properties:
+            type:
+              type: string
+            position:
+              type: array
+              items:
+                type: number
+example:
+  rentalBookingId: "59b633a2613a8a7811b3d5c9"
+  vehicle:
+    id: "5624cbb0aaed33d0128d6107"
+    name: "Dodge Charger"
+    licensePlate: "K VW 99"
+    additionalDetails:
+      fuelType: "gas"
+      model: "Sharan"
+      brand: "VW"
+    damageReportImage: "data:image/png;base64,..."
+    damageReports:
+      - type: "scratch"
+        position:
+          - 48.80239520958084
+          - 53.53846153846154
+      - type: "dent"
+        position:
+          - 75.87969520958084
+          - 23.53909153846154
