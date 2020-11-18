@@ -13,8 +13,6 @@ info:
 
       ### Changelog
 
-      ### 1.0.0
-
       #### 0.2.0
         - TACS keyring is included in response of ```GET /keyrings```
 
