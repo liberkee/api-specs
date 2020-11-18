@@ -3,7 +3,9 @@ info:
   title: Huf SixSense Cloud APIs
   description: |
 
-      # You are viewing the Huf Cloud API version 1.0.1
+      ![Brand Logo](./images/sixsense.png)
+
+      You are viewing the Huf Cloud API version 1.0.1
 
       ---
 
@@ -11,7 +13,7 @@ info:
 
       ## 1.0.0
 
-      [generic API requirements](./huf-mobility-solutions/b2b-api/index_generic_api_requirements_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [generic API requirements](./index_generic_api_requirements_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ---
 
@@ -19,32 +21,32 @@ info:
 
       ## 1.4.0 (under development)
 
-      [vehicle access HUF](./huf-mobility-solutions/b2b-api/index_vehicle_access_HSM_140.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle access HUF](./index_vehicle_access_HSM_140.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.3.0
 
-      [vehicle access HUF](./huf-mobility-solutions/b2b-api/index_vehicle_access_HSM_130.html?defaultModelRendering=model&defaultModelExpandDepth=5)
-      [vehicle access EXTERNAL](./huf-mobility-solutions/b2b-api/index_vehicle_access_EXTERNAL_130.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle access HUF](./index_vehicle_access_HSM_130.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle access EXTERNAL](./index_vehicle_access_EXTERNAL_130.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.2.0
 
-      [vehicle access HUF](./huf-mobility-solutions/b2b-api/index_vehicle_access_HSM_120.html?defaultModelRendering=model&defaultModelExpandDepth=5)
-      [vehicle access EXTERNAL](./huf-mobility-solutions/b2b-api/index_vehicle_access_EXTERNAL_120.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle access HUF](./index_vehicle_access_HSM_120.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle access EXTERNAL](./index_vehicle_access_EXTERNAL_120.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.1.1
 
-      [vehicle access HUF](./huf-mobility-solutions/b2b-api/index_vehicle_access_HSM_111.html?defaultModelRendering=model&defaultModelExpandDepth=5)
-      [vehicle access EXTERNAL](./huf-mobility-solutions/b2b-api/index_vehicle_access_EXTERNAL_111.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle access HUF](./index_vehicle_access_HSM_111.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle access EXTERNAL](./index_vehicle_access_EXTERNAL_111.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.1.0
 
-      [vehicle access HUF](./huf-mobility-solutions/b2b-api/index_vehicle_access_HSM_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
-      [vehicle access EXTERNAL](./huf-mobility-solutions/b2b-api/index_vehicle_access_EXTERNAL_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle access HUF](./index_vehicle_access_HSM_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle access EXTERNAL](./index_vehicle_access_EXTERNAL_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.0.1
 
-      [vehicle access HSM](./huf-mobility-solutions/b2b-api/index_vehicle_access_HSM_101.html?defaultModelRendering=model&defaultModelExpandDepth=5)
-      [vehicle access EXTERNAL](./huf-mobility-solutions/b2b-api/index_vehicle_access_EXTERNAL_101.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle access HSM](./index_vehicle_access_HSM_101.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle access EXTERNAL](./index_vehicle_access_EXTERNAL_101.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ---
 
@@ -52,25 +54,25 @@ info:
 
       ## 1.1.0
 
-      [vehicle status HUF](./huf-mobility-solutions/b2b-api/index_vehicle_status_HSM_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle status HUF](./index_vehicle_status_HSM_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.0.0
 
-      [vehicle status HUF](./huf-mobility-solutions/b2b-api/index_vehicle_status_HSM_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle status HUF](./index_vehicle_status_HSM_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       # status elements
 
       ## 1.2.0 (under development)
 
-      [status elements](./huf-mobility-solutions/b2b-api/index_status_elements_120.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [status elements](./index_status_elements_120.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.1.0
 
-      [status elements](./huf-mobility-solutions/b2b-api/index_status_elements_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [status elements](./index_status_elements_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.0.0
 
-      [status elements](./huf-mobility-solutions/b2b-api/index_status_elements_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [status elements](./index_status_elements_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ---
 
@@ -78,7 +80,7 @@ info:
 
       ## 1.0.0
 
-      [vehicle telematics HUF](./huf-mobility-solutions/b2b-api/index_vehicle_telematics_HSM.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle telematics HUF](./index_vehicle_telematics_HSM.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ---
 
@@ -86,7 +88,7 @@ info:
 
       ## 1.0.0
 
-      [broker HUF](./huf-mobility-solutions/b2b-api/index_broker_HUF_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [broker HUF](./index_broker_HUF_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ---
 
@@ -94,7 +96,7 @@ info:
 
       ## 1.0.0
 
-      [remote vehicle access HUF](./huf-mobility-solutions/b2b-api/index_remote_vehicle_access_HUF_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [remote vehicle access HUF](./index_remote_vehicle_access_HUF_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ---
 
@@ -104,8 +106,8 @@ info:
 
       ## 1.0.0
 
-      [data subscription HUF](./huf-mobility-solutions/b2b-api/data_subscribed_HUF_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
-      [data subscription EXTERNAL](./huf-mobility-solutions/b2b-api/data_subscribed_EXTERNAL_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [data subscription HUF](./data_subscribed_HUF_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [data subscription EXTERNAL](./data_subscribed_EXTERNAL_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ---
 
@@ -117,21 +119,21 @@ info:
 
       ## 1.3.0
 
-      [vehicle master data HUF](./huf-mobility-solutions/b2b-api/index_vehicle_master_data_HSM_130.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle master data HUF](./index_vehicle_master_data_HSM_130.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.2.0
 
-      [vehicle master data HUF](./huf-mobility-solutions/b2b-api/index_vehicle_master_data_HSM_120.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle master data HUF](./index_vehicle_master_data_HSM_120.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.1.0
 
-      [vehicle master data HUF](./huf-mobility-solutions/b2b-api/index_vehicle_master_data_HSM_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
-      [vehicle master data EXTERNAL](./huf-mobility-solutions/b2b-api/index_vehicle_master_data_EXTERNAL_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle master data HUF](./index_vehicle_master_data_HSM_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle master data EXTERNAL](./index_vehicle_master_data_EXTERNAL_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.0.0
 
-      [vehicle master data HUF](./huf-mobility-solutions/b2b-api/index_vehicle_master_data_HSM_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
-      [vehicle master data EXTERNAL](./huf-mobility-solutions/b2b-api/index_vehicle_master_data_EXTERNAL_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle master data HUF](./index_vehicle_master_data_HSM_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [vehicle master data EXTERNAL](./index_vehicle_master_data_EXTERNAL_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ---
 
@@ -143,10 +145,10 @@ info:
 
       ## 1.1.0
 
-      [accounts HUF](./huf-mobility-solutions/b2b-api/index_accounts_HUF_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
-      [accounts EXTERNAL](./huf-mobility-solutions/b2b-api/index_accounts_EXTERNAL_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [accounts HUF](./index_accounts_HUF_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [accounts EXTERNAL](./index_accounts_EXTERNAL_110.html?defaultModelRendering=model&defaultModelExpandDepth=5)
 
       ## 1.0.0
 
-      [accounts HUF](./huf-mobility-solutions/b2b-api/index_accounts_HUF_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
-      [accounts EXTERNAL](./huf-mobility-solutions/b2b-api/index_accounts_EXTERNAL_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [accounts HUF](./index_accounts_HUF_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
+      [accounts EXTERNAL](./index_accounts_EXTERNAL_100.html?defaultModelRendering=model&defaultModelExpandDepth=5)
