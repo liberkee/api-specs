@@ -103,12 +103,6 @@ paths:
             type: string
             format: uuid
             example: 0b2734b2-0d55-4502-9b54-3d9aaafc2177
-        - name: vehicleUpdateInformation
-          in: query
-          description: Updated information for the new vehicle.
-          required: true
-          schema:
-            $ref: '#/components/schemas/VehicleUpdate'
       responses:
         '201':
           description: Item updated.
@@ -159,6 +153,8 @@ paths:
           description: Invalid input/required property not set.
         '401':
           description: Unauthorized.
+        '404':
+          description: Home location not found.
         '409':
           description: An item with that ID already exists.
       requestBody:
@@ -179,6 +175,14 @@ paths:
       operationId: getLocations
       description: |
         Receive all locations available for the current user.
+      parameters:
+        - name: hierarchy
+          in: query
+          description: Set to "true" to get hierarchical list.
+          required: false
+          schema:
+            type: string
+            example: 'true'
       responses:
         '200':
           description: Search results matching criteria.
