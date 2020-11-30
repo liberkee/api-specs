@@ -229,7 +229,9 @@ paths:
       summary: Update an existing location.
       operationId: putLocationLocationId
       description: |
-        Update an existing location use the `locationID` to specify which location you want to change.                  
+        Update an existing location use the `locationId` to specify which location you want to change.
+        
+        This PUT request does not create a location if it does not exist. You can only use it to update existing locations.
       parameters:
         - name: locationId
           in: path
@@ -246,6 +248,8 @@ paths:
           description: invalid input/required property not set
         '401':
           description: unauthorized
+        '404':
+          description: Location or new parent location could not be found.
         '409':
           description: an item with that ID already exists
       requestBody:
@@ -266,7 +270,7 @@ paths:
 
         Leave the parameter for `parentLocationId` blank (`""`) to add a new top level location.
       parameters:
-        - name: locationId
+        - name: parentLocationId
           in: path
           description: ID of the parent location to add the new location to.
           required: true
@@ -384,15 +388,40 @@ components:
           type: string
           format: uuid
           example: 6ed71e99-3c76-4512-8a45-e6103ff9a297
+        parentLocationId:
+          type: string
+          format: uuid
+          example: 8b3690c0-272e-11eb-9df5-1908aab948b2
         name:
           type: string
           example: Huf Velbert
-        city:
-          type: string
-          example: Velbert
         country:
           type: string
           example: Germany
+        state:
+          type: string
+          example: NRW
+        city:
+          type: string
+          example: Velbert
+        zip:
+          type: string
+          example: "42551"
+        address:
+          type: string
+          example: "Haberstrasse 46"
+        address2:
+          type: string
+          example: "Level 3"
+        additionalInfo:
+          type: string
+          example: "Text that describes something"
+        email:
+          type: string
+          example: "kij@kong.com"
+        phone:
+          type: string
+          example: "+49 2501 272 0"
     LocationCreate:
       type: object
       required:
@@ -434,9 +463,34 @@ components:
         name:
           type: string
           example: Huf Velbert
-        city:
+        parentLocationId:
           type: string
-          example: Velbert
+          format: uuid
+          example: "6ed71e99-3c76-4512-8a45-e6103ff9a297"
         country:
           type: string
           example: Germany
+        state:
+          type: string
+          example: NRW
+        city:
+          type: string
+          example: Velbert
+        zip:
+          type: string
+          example: "42551"
+        address:
+          type: string
+          example: "Haberstrasse 46"
+        address2:
+          type: string
+          example: "Level 3"
+        additionalInfo:
+          type: string
+          example: "Text that describes something"
+        email:
+          type: string
+          example: "kij@kong.com"
+        phone:
+          type: string
+          example: "+49 2501 272 0"
