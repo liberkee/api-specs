@@ -258,6 +258,34 @@ paths:
             schema:
               $ref: '#/components/schemas/LocationUpdate'
         description: Location data.
+    delete:
+      tags:
+        - Location Management
+      summary: Delete an existing location.
+      operationId: deleteLocationLocationId
+      description: |
+        Delete an existing location. A location can only be deleted if it contains no vehicles, so make sure to delete
+        or move all vehicles before trying to delete a location.
+      parameters:
+        - name: locationId
+          in: path
+          description: ID of the location to be deleted
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 7e72593d-2912-484b-806e-0f57c2accb61
+      responses:
+        '204':
+          description: item deleted
+        '400':
+          description: invalid location uuid;
+        '401':
+          description: unauthorized
+        '404':
+          description: location not found
+        '409':
+          description: location still contains vehicles
 
   /location/{parentLocationId}:
     post:
