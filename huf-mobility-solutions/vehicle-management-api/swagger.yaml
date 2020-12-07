@@ -26,6 +26,8 @@ paths:
       description: |
         Receive all vehicle data which is available for the current user.
 
+        Filter the vehicle list to only contain the vehicles of a specific location by using the corresponding query parameter.
+
         All vehicles of the users home location as well as all vehicles of the home locations sub-locations will be fetched by this request.
 
         | key | description | example |
@@ -37,6 +39,15 @@ paths:
         | licensePlate | number plate/license plate of the vehicle | ME-HF 333 |
         | modelYear | vehicle construction year | 2020 |
         | location | location in which the vehicle is located | Huf Velbert |
+      parameters:
+        - name: homeLocationId
+          in: query
+          description: Filter vehicle list for vehicles based in this location.
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: 0b2734b2-0d55-4502-9b54-3d9aaafc2177
       responses:
         '200':
           description: Search results matching criteria
