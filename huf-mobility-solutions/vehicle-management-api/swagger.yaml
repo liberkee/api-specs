@@ -121,6 +121,32 @@ paths:
         description: location data
       tags:
         - Vehicle Management
+    delete:
+      summary: Delete a vehicle.
+      operationId: deleteVehicleId
+      description: |
+        Delete a vehicle. You can only delete a vehicle if it has no relations assigned (devices installed).
+      parameters:
+        - name: externalVehicleRef
+          in: path
+          description: Reference to the vehicle from your system.
+          required: true
+          schema:
+            type: string
+            example: VNKKG3031OA124967
+      responses:
+        '204':
+          description: Item deleted.
+        '400':
+          description: Invalid input/required property not set.
+        '401':
+          description: Unauthorized
+        '404':
+          description: Item not found.
+        '409':
+          description: Item still has device relations.
+      tags:
+        - Vehicle Management
     
   /vehicle/{homeLocationId}:
     post:
