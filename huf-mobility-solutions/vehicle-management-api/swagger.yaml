@@ -90,10 +90,12 @@ paths:
       tags:
         - Vehicle Management
     put:
-      summary: Update an existing vehicle and move it from one location to another.
+      summary: Update an existing vehicle.
       operationId: putVehicleId
       description: |
-        Update the data of an existing vehicle or move it to a different location.                        
+        Update the vehicle details of an existing vehicle.
+
+        By providing a new `homeLocationId` attribute in the request body, the vehicle will be moved to the new location.
       parameters:
         - name: externalVehicleRef
           in: path
@@ -101,8 +103,7 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
-            example: 0b2734b2-0d55-4502-9b54-3d9aaafc2177
+            example: VNKKG3031OA124967
       responses:
         '201':
           description: Item updated.
@@ -383,7 +384,7 @@ components:
         modelYear:
           type: string
           example: '2020'
-        locationId:
+        homeLocationId:
           type: string
           format: uuid
           example: 9b075a46-1d4b-46a3-a8ca-14c5e218054d
