@@ -44,8 +44,8 @@ properties:
         description: ISO 4217
   vehicleClass:
     type: "object"
-    nullable: true
     description: only available in state reserved
+    nullable: true
     required:
       - "id"
       - "name"
