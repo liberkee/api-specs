@@ -4,20 +4,144 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/hufsm/vehilce-mgmt-api/1.0.0
 info:
-  title: Huf Secure Mobile - Vehicle Management API
+  title: Liberkee - Vehicle Management API
   description: This API is designed to synchronize and manage the vehicles of your system that are shared with our system.
   version: "1.0.0"
   contact:
-    email: support@huf-sixsense.com
+    email: support@liberkee.com
   license:
-    name: Huf Secure Mobile 1.0
-    url: 'http://www.huf-sixsense.com'
+    name: Liberkee 1.0
+    url: 'http://www.liberkee.com'
 tags:
   - name: Vehicle Management
     description: Vehicle related actions and end points.
   - name: Location Management
     description: Location related actions and end points.
 paths:
+# auth {{{ #
+  /auth:
+    post:
+      summary: Login and retrieve a login token.
+      operationId: postAuth
+      description: |
+        Send username and password information and retrieve an auth token in the response which
+        shall be used in every request to read, create, update and delete vehicle and location resources.
+      responses:
+        '200':
+          description: Login succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid input/required property not set.
+        '401':
+          description: Unauthorized.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+        description: Login data for retrieving an auth token.
+      tags:
+        - Auth
+# }}} auth #
+# entity {{{ #
+  /entity:
+    get:
+      summary: Get entity from IoT database.
+      operationId: getEntity
+      description: |
+        Get the details of a specific entity (device or asset/vehicle) by querying for either the 'deviceName', 'externalVehicleRef' or the 'label'.
+      parameters:
+        - name: X-Authorization
+          in: header
+          description: Internal auth token. Can't be retrieved by /auth route.
+          required: true
+          schema:
+            type: string
+            example: 'iOiJIUzUxMiJ9.eyJzdWIiOiJ'
+        - name: deviceName
+          in: query
+          description: Name of the device for which the details shall be returned.
+          required: false
+          schema:
+            type: string
+            example: '0f4d2810-8288-11eb-9770-37432bab8c9d'
+        - name: externalVehicleRef
+          in: query
+          description: External vehicle reference of the asset/vehicle for which the details shall be returned.
+          required: false
+          schema:
+            type: string
+            example: 'JH4DA9470PS008042@liberkee'
+        - name: label
+          in: query
+          description: Label of the device for which the details shall be returned.
+          required: false
+          schema:
+            type: string
+            example: '20030515QA3259:359315079659388'
+      responses:
+        '200':
+          description: .
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid input/required property not set.
+        '401':
+          description: Unauthorized.
+        '404':
+          description: Item not found.
+      tags:
+        - Entity
+  /entities:
+    get:
+      summary: Get entities from IoT database.
+      operationId: getEntities
+      description: |
+        Get a list of entities by optionally querying for 'customerTitle'.
+        Group the list by 'asset' or 'device' using query parameter 'groupBy'.
+      parameters:
+        - name: X-Authorization
+          in: header
+          description: Internal auth token. Can't be retrieved by /auth route.
+          required: true
+          schema:
+            type: string
+            example: 'iOiJIUzUxMiJ9.eyJzdWIiOiJ'
+        - name: customerTitle
+          in: query
+          description: Title of the csutomer for which the entities shall be returned.
+          required: false
+          schema:
+            type: string
+            example: 'liberkee'
+        - name: groupBy
+          in: query
+          description: Group the entities by 'asset' (vehicle) or 'device'. Defaults to 'device'.
+          required: false
+          schema:
+            type: string
+            example: 'device'
+      responses:
+        '200':
+          description: .
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid input/required property not set.
+        '401':
+          description: Unauthorized.
+        '404':
+          description: Item not found.
+      tags:
+        - Entity
+# }}} entity #
 # vehicles {{{ #
   /vehicles:
     get:
@@ -34,12 +158,19 @@ paths:
         |-|-|-|
         | brand | manufacturer of the vehicle | Nissan |
         | model | vehicle model | Altima |
-        | externalVehicleRef | vehicle reference/ID which identifies the vehicle in the HSM and in the partner system/VIN can be used | 1FTFW1ET3BKD42728 |
+        | externalVehicleRef | vehicle reference/ID which identifies the vehicle in the Liberkee and in the partner system/VIN can be used | 1FTFW1ET3BKD42728 |
         | vin | vehicle identification number | 1FTFW1ET3BKD42728 |
         | licensePlate | number plate/license plate of the vehicle | ME-HF 333 |
         | modelYear | vehicle construction year | 2020 |
-        | location | location in which the vehicle is located | Huf Velbert |
+        | location | location in which the vehicle is located | Liberkee Velbert |
       parameters:
+        - name: X-Authorization
+          in: header
+          description: Authentication header
+          required: true
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
         - name: homeLocationId
           in: query
           description: Filter vehicle list for vehicles based in this location.
@@ -73,12 +204,19 @@ paths:
         |-|-|-|
         | brand | manufacturer of the vehicle | Nissan |
         | model | vehicle model | Altima |
-        | externalVehicleRef | vehicle reference/ID which identifies the vehicle in the HSM and in the partner system/VIN can be used | 1FTFW1ET3BKD42728 |
+        | externalVehicleRef | vehicle reference/ID which identifies the vehicle in the Liberkee and in the partner system/VIN can be used | 1FTFW1ET3BKD42728 |
         | vin | vehicle identification number | 1FTFW1ET3BKD42728 |
         | licensePlate | number plate/license plate of the vehicle | ME-HF 333 |
         | modelYear | vehicle construction year | 2020 |
-        | location | location in which the vehicle is located | Huf Velbert |
+        | location | location in which the vehicle is located | Liberkee Velbert |
       parameters:
+        - name: X-Authorization
+          in: header
+          description: Authentication header
+          required: true
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
         - name: externalVehicleRef
           in: path
           description: Reference to the vehicle from your system.
@@ -108,6 +246,13 @@ paths:
 
         By providing a new `homeLocationId` attribute in the request body, the vehicle will be moved to the new location.
       parameters:
+        - name: X-Authorization
+          in: header
+          description: Authentication header
+          required: true
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
         - name: externalVehicleRef
           in: path
           description: Reference to the vehicle from your system.
@@ -138,6 +283,13 @@ paths:
       description: |
         Delete a vehicle. You can only delete a vehicle if it has no relations assigned (devices installed).
       parameters:
+        - name: X-Authorization
+          in: header
+          description: Authentication header
+          required: true
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
         - name: externalVehicleRef
           in: path
           description: Reference to the vehicle from your system.
@@ -171,11 +323,18 @@ paths:
         |-|-|-|
         | brand | manufacturer of the vehicle | Nissan |
         | model | vehicle model | Altima |
-        | externalVehicleRef | vehicle reference/ID which identifies the vehicle in the HSM and in the partner system/VIN can be used | 1FTFW1ET3BKD42728 |
+        | externalVehicleRef | vehicle reference/ID which identifies the vehicle in the Liberkee and in the partner system/VIN can be used | 1FTFW1ET3BKD42728 |
         | vin | vehicle identification number | 1FTFW1ET3BKD42728 |
         | licensePlate | number plate/license plate of the vehicle | ME-HF 333 |
         | modelYear | vehicle construction year | 2020 |
       parameters:
+        - name: X-Authorization
+          in: header
+          description: Authentication header
+          required: true
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
         - name: homeLocationId
           in: path
           description: ID of the home location of the new vehicle.
@@ -214,6 +373,13 @@ paths:
       description: |
         Receive all locations available for the current user.
       parameters:
+        - name: X-Authorization
+          in: header
+          description: Authentication header
+          required: true
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
         - name: hierarchy
           in: query
           description: Set to "true" to get hierarchical list.
@@ -242,6 +408,13 @@ paths:
       description: |
         Get the information about a single location.
       parameters:
+        - name: X-Authorization
+          in: header
+          description: Authentication header
+          required: true
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
         - name: locationId
           in: path
           description: ID of the location to view.
@@ -271,6 +444,13 @@ paths:
         
         This PUT request does not create a location if it does not exist. You can only use it to update existing locations.
       parameters:
+        - name: X-Authorization
+          in: header
+          description: Authentication header
+          required: true
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
         - name: locationId
           in: path
           description: ID of the location to be updated
@@ -305,6 +485,13 @@ paths:
         Delete an existing location. A location can only be deleted if it contains no vehicles, so make sure to delete
         or move all vehicles before trying to delete a location.
       parameters:
+        - name: X-Authorization
+          in: header
+          description: Authentication header
+          required: true
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
         - name: locationId
           in: path
           description: ID of the location to be deleted
@@ -336,6 +523,13 @@ paths:
 
         Leave the parameter for `parentLocationId` blank (`""`) to add a new top level location.
       parameters:
+        - name: X-Authorization
+          in: header
+          description: Authentication header
+          required: true
+          schema:
+            type: string
+            example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
         - name: parentLocationId
           in: path
           description: ID of the parent location to add the new location to.
@@ -375,6 +569,29 @@ paths:
 # }}}  #
 components:
   schemas:
+    AuthRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: john.doe@liberkee.com
+        password:
+          type: string
+          example: super_secret-password!=?
+    AuthResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
+        message:
+          type: string
+          example: 'Use as X-Authorization header token'
     Vehicle:
       type: object
       required:
@@ -460,7 +677,7 @@ components:
           example: 8b3690c0-272e-11eb-9df5-1908aab948b2
         name:
           type: string
-          example: Huf Velbert
+          example: Liberkee Velbert
         country:
           type: string
           example: Germany
@@ -495,7 +712,7 @@ components:
       properties:
         name:
           type: string
-          example: Huf Velbert
+          example: Liberkee Velbert
         country:
           type: string
           example: Germany
@@ -528,7 +745,7 @@ components:
       properties:
         name:
           type: string
-          example: Huf Velbert
+          example: Liberkee Velbert
         parentLocationId:
           type: string
           format: uuid
