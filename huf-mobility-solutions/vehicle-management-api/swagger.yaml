@@ -84,11 +84,11 @@ paths:
             example: '20030515QA3259:359315079659388'
       responses:
         '200':
-          description: .
+          description: Login succeeded.
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/Entity'
         '400':
           description: Invalid input/required property not set.
         '401':
@@ -132,7 +132,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/EntityList'
         '400':
           description: Invalid input/required property not set.
         '401':
@@ -592,75 +592,242 @@ components:
         message:
           type: string
           example: 'Use as X-Authorization header token'
-    Vehicle:
+    Asset:
       type: object
-      required:
-        - externalVehicleRef
       properties:
-        externalVehicleRef:
-          type: string
-          example: 1FTFW1ET3BKD42728
-        brand:
-          type: string
-          example: Nissan
-        model:
-          type: string
-          example: Altima
-        vin:
-          type: string
-          example: 1FTFW1ET3BKD42728
-        licensePlate:
-          type: string
-          example: ME-HF 333
-        modelYear:
-          type: string
-          example: '2020'
-    VehicleUpdate:
-      type: object
-      required:
-        - externalVehicleRef
-      properties:
-        externalVehicleRef:
-          type: string
-          example: 1FTFW1ET3BKD42728
-        brand:
-          type: string
-          example: Nissan
-        model:
-          type: string
-          example: Altima
-        vin:
-          type: string
-          example: 1FTFW1ET3BKD42728
-        licensePlate:
-          type: string
-          example: ME-HF 333
-        modelYear:
-          type: string
-          example: '2020'
-        homeLocationId:
-          type: string
-          format: uuid
-          example: 9b075a46-1d4b-46a3-a8ca-14c5e218054d
-    Vehicles:
-      type: object
-      required:
-        - vehicle
-        - location
-      properties:
-        vehicle:
-          $ref: '#/components/schemas/Vehicle'
-        location:
-          $ref: '#/components/schemas/Location'
-        equipedWith:
+        device:
           type: object
           properties:
-            cam:
-              type: boolean
-              example: true
-            keyholder:
-              type: boolean
-              example: false
+            asset_details:
+              $ref: '#/components/schemas/AssetDetails'
+            asset_attributes:
+              $ref: '#/components/schemas/AssetAttributes'
+            asset_additional_information:
+              $ref: '#/components/schemas/AssetAdditionalInformation'
+            asset_relation:
+              type: array
+              items:
+                type: object
+                properties:
+                  asset:
+                    type: object
+                    properties:
+                      device_details:
+                        $ref: '#/components/schemas/DeviceDetails'
+                      device_attributes:
+                        $ref: '#/components/schemas/DeviceAttributes'
+                      device_additional_information:
+                        $ref: '#/components/schemas/DeviceAdditionalInformation'
+                      device_customer:
+                        $ref: '#/components/schemas/Customer'
+            device_customer:
+              $ref: '#/components/schemas/Customer'
+    AssetAttributes:
+      type: object
+      description: Contains all TB device attributes, Some examples here in the schema.
+      properties:
+        brand:
+          type: string
+          example: VW
+        model:
+          type: string
+          example: IQ3
+        vin:
+          type: string
+          example: JH4DC4340SS001220
+        externalVehicleRef:
+          type: string
+          example: JH4DC4340SS001220
+        hufVehicleTypeId:
+          type: string
+          example: 000278_VW_IQ3
+    AssetAdditionalInformation:
+      type: object
+      properties:
+        entity_uuid:
+          type: string
+          format: UUID
+          example: '587876a0-ec2b-11ea-ac27-9ba6fe0265ed'
+        customer_uuid:
+          type: string
+          format: UUID
+          example: '4a3fe120-11b3-11ea-88c8-912295edc6ff'
+    AssetDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1eaec2b587876a0ac279ba6fe0265ed
+        customer_id:
+          type: string
+          example: 1ea11b34a3fe12088c8912295edc6ff
+        type:
+          type: string
+          enum:
+            - Car
+          example: Car
+        name:
+          type: string
+          example: 'vehicle01@liberkee'
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1ea11b34a3fe12088c8912295edc6ff
+        additional_info:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+          example: Haberstrasse 46
+        address2:
+          type: string
+          nullable: true
+          example: null
+        city:
+          type: string
+          nullable: true
+          example: Velbert
+        country:
+          type: string
+          nullable: true
+          example: Velbert
+        email:
+          type: string
+          nullable: true
+          example: lib@erkee.com
+        phone:
+          type: string
+          nullable: true
+          example: '+49 2051 272 0'
+        search_text:
+          type: string
+          example: liberkee
+        state:
+          type: string
+          nullable: true
+          example: NRW
+        tenant_id:
+          type: string
+          example: 1ea0a223d60eeb088c8912295edc6ff
+        parent_customer_id:
+          type: string
+          nullable: true
+          example: 1ea0a223d60eeb088c8912295edc6fe
+        title:
+          type: string
+          example: liberkee
+        zip:
+          type: string
+          nullable: true
+          example: 42551
+    Device:
+      type: object
+      properties:
+        device:
+          type: object
+          properties:
+            device_details:
+              $ref: '#/components/schemas/DeviceDetails'
+            device_attributes:
+              $ref: '#/components/schemas/DeviceAttributes'
+            device_additional_information:
+              $ref: '#/components/schemas/DeviceAdditionalInformation'
+            device_relation:
+              type: array
+              items:
+                type: object
+                properties:
+                  asset:
+                    type: object
+                    properties:
+                      asset_details:
+                        $ref: '#/components/schemas/AssetDetails'
+                      asset_attributes:
+                        $ref: '#/components/schemas/AssetAttributes'
+                      asset_additional_information:
+                        $ref: '#/components/schemas/AssetAdditionalInformation'
+                      asset_customer:
+                        $ref: '#/components/schemas/Customer'
+            device_customer:
+              $ref: '#/components/schemas/Customer'
+    DeviceAttributes:
+      type: object
+      description: Contains all TB device attributes, Some examples here in the schema.
+      properties:
+        ccid:
+          type: string
+          example: 89882390000065590815
+        sorc_id:
+          type: string
+          format: UUID
+          example: '51454548-96cb-450c-8114-f086491427a8'
+        serial_number:
+          type: string
+          example: 20073110QA2940
+        huf_telematic_cert_serial:
+          type: string
+          example: 48C69CE4D0EDEFE3
+        huf_secure_access_cert_serial:
+          type: string
+          example: 2E1F7B6277A05D5F
+        imei:
+          type: string
+          example: 354679090885438
+        imsi:
+          type: string
+          example: 901288002345199
+        currentSoftwareVersion:
+          type: string
+          example: 0.13.1
+        lastActivityTime:
+          type: string
+          example: 1599573590805
+    DeviceAdditionalInformation:
+      type: object
+      properties:
+        entity_uuid:
+          type: string
+          format: UUID
+          example: '587876a0-ec2b-11ea-ac27-9ba6fe0265ed'
+        customer_uuid:
+          type: string
+          format: UUID
+          example: '4a3fe120-11b3-11ea-88c8-912295edc6ff'
+    DeviceDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1eaec2b587876a0ac279ba6fe0265ed
+        customer_id:
+          type: string
+          example: 1ea11b34a3fe12088c8912295edc6ff
+        type:
+          type: string
+          enum:
+            - CAM
+            - Keyholder
+          example: CAM
+        name:
+          type: string
+          format: UUID
+          example: '51454548-96cb-450c-8114-f086491427a8'
+        label:
+          type: string
+          example: 20073110QA2940:354679090885438
+    Entity:
+      oneOf:
+        - $ref: '#/components/schemas/Asset'
+        - $ref: '#/components/schemas/Device'
+    EntityList:
+      type: array
+      items:
+        oneOf:
+          - $ref: '#/components/schemas/Asset'
+          - $ref: '#/components/schemas/Device'
     Location:
       type: object
       required:
@@ -777,3 +944,72 @@ components:
         phone:
           type: string
           example: "+49 2501 272 0"
+    Vehicle:
+      type: object
+      required:
+        - externalVehicleRef
+      properties:
+        externalVehicleRef:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        brand:
+          type: string
+          example: Nissan
+        model:
+          type: string
+          example: Altima
+        vin:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        licensePlate:
+          type: string
+          example: ME-HF 333
+        modelYear:
+          type: string
+          example: '2020'
+    VehicleUpdate:
+      type: object
+      required:
+        - externalVehicleRef
+      properties:
+        externalVehicleRef:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        brand:
+          type: string
+          example: Nissan
+        model:
+          type: string
+          example: Altima
+        vin:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        licensePlate:
+          type: string
+          example: ME-HF 333
+        modelYear:
+          type: string
+          example: '2020'
+        homeLocationId:
+          type: string
+          format: uuid
+          example: 9b075a46-1d4b-46a3-a8ca-14c5e218054d
+    Vehicles:
+      type: object
+      required:
+        - vehicle
+        - location
+      properties:
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        location:
+          $ref: '#/components/schemas/Location'
+        equipedWith:
+          type: object
+          properties:
+            cam:
+              type: boolean
+              example: true
+            keyholder:
+              type: boolean
+              example: false
