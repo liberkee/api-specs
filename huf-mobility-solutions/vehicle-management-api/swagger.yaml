@@ -193,7 +193,7 @@ paths:
       tags:
         - Vehicle Management
 
-  /vehicle/{externalVehicleRef}:
+  /vehicles/{externalVehicleRef}:
     get:
       summary: Get the information for the vehicle referenced by externalVehicleRef.
       operationId: getVehicle
@@ -399,7 +399,7 @@ paths:
         '401':
           description: unauthorized
 
-  /location/{locationId}:
+  /locations/{locationId}:
     get:
       tags:
         - Location Management
