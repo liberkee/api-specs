@@ -1,20 +1,11 @@
 openapi: 3.0.0
 info:
-  version: v3.1
+  version: v3.2.1
   title: Liberkee Voucher API
-
-servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/liberkee/liberkee-voucher-api/v3
-  - description: "SwaggerHub API mock for the liberkee® API."
-    url: https://virtserver.swaggerhub.com/liberkee/liberkee-voucher-api/v2
-
 
 tags:
   - name: Digital Key Voucher Management
     description: Vehicle related actions and end points.
-
 
 paths:
   /vouchers:
