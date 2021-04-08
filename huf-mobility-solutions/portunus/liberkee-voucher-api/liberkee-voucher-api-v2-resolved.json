@@ -1,0 +1,417 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Liberkee Voucher API",
+    "version": "v2"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/liberkee/liberkee-voucher-api/v2",
+      "description": "SwaggerHub API Auto Mocking"
+    },
+    {
+      "url": "https://virtserver.swaggerhub.com/liberkee/liberkee-voucher-api/v2",
+      "description": "SwaggerHub API mock for the liberkee® API."
+    }
+  ],
+  "security": [
+    {
+      "oAuth": [
+        "create_voucher_code_for_device"
+      ]
+    }
+  ],
+  "paths": {
+    "/vouchers/create": {
+      "post": {
+        "summary": "Create a voucher for digital keys.",
+        "description": "Request a voucher for usage in the liberkee® app.\n",
+        "operationId": "getVoucherCode",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoucherParameter"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The \"KeyVoucher\" object with the voucher code and meta\ninformation for the digital key.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyVoucher"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This code indicates that one of your parameters caused an issue. \nRead the response for more details.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoucherParameterClientError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Please authorize first to use this route.\n"
+          },
+          "403": {
+            "description": "You are not allowed to use this route.\n"
+          },
+          "404": {
+            "description": "The external device reference you specified was not found.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoucherParameterNotFoundError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oAuth": [
+              "create_voucher_code_for_device"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CustomActionConfiguration": {
+        "type": "object",
+        "properties": {
+          "action_type": {
+            "type": "string",
+            "enum": [
+              "HttpRequest",
+              "OpenInBrowser"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "format": "url"
+          },
+          "http_method": {
+            "type": "string",
+            "enum": [
+              "POST",
+              "GET",
+              "UPDATE",
+              "DELETE"
+            ]
+          },
+          "headers": {
+            "type": "object"
+          },
+          "body": {
+            "type": "object"
+          }
+        },
+        "description": "This object is used inside a custom action. You can specify HTTP\nrequests with this configuration that will get passed into the \nHTTP request mechanism we support inside liberkee® app. Also, the\nOpenInBrowser option gives you the abilty to open a page of your\nchoice. Use the url parameter to pass along additional query\nparameters that your end point can interpret.\n"
+      },
+      "CustomAction": {
+        "type": "object",
+        "properties": {
+          "caption": {
+            "type": "string"
+          },
+          "dialog_type": {
+            "type": "string",
+            "description": "Setting this will select the dialog type that the user will\nsee after pressing this button.\n\nBy selecting 'Confirmation' a simple confirm dialog is \npresented to the user and the text from the 'text' property\nis displayed. The user can confirm or cancel this request.\n\nBy selecting 'Information' the user will se a pop-up that\ndisplays the specified information and executes the specified\nrequest.\n",
+            "enum": [
+              "Confirmation",
+              "Information"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "description": "This is the text, the user gets displayed when clicking on\nthe button you customized.\n"
+          },
+          "icon": {
+            "type": "string",
+            "description": "This selects the icon the button will display to your user.\n\nSee our documentation for more details of the icons.\n",
+            "enum": [
+              "None",
+              "Sharing",
+              "Edit",
+              "EndBooking",
+              "ExtendBooking"
+            ]
+          },
+          "configuration": {
+            "$ref": "#/components/schemas/CustomActionConfiguration"
+          }
+        },
+        "description": "This is the action that will be enabled by the button. We \nsupport the action method 'HttpRequest' at this point. We\nwill make sure that the request is passed to the target in URL \nas specified. This is useful when you want a certain behaviour\nthat we do not support out-of-the-box.\n"
+      },
+      "KeyVoucher": {
+        "type": "object",
+        "properties": {
+          "voucher": {
+            "pattern": "^https://liberkee.com:/redeem/[a-zA-Z0-9]{20}$",
+            "type": "string",
+            "description": "The string to present to your user; it is designed to be\nunderstood by the mobile operating system to open the liberkee® app.\n"
+          },
+          "key_valid_from": {
+            "type": "string",
+            "description": "The start time the digital key that this voucher\nrepresents becomes usable, expressed in extended ISO 8601.\n",
+            "format": "date-time"
+          },
+          "key_valid_to": {
+            "type": "string",
+            "description": "The start time the digital key that this voucher\nrepresents stops being usable, expressed in extended ISO 8601.\n",
+            "format": "date-time"
+          },
+          "expires_at": {
+            "type": "string",
+            "description": "The time when the voucher code becomes invalid,\nexpressed as extended ISO 8601.\n",
+            "format": "date-time"
+          }
+        },
+        "example": {
+          "voucher": "https://liberkee.com/redeem/adventure11acmerental",
+          "key_valid_from": "2021-10-30T07:30:00Z",
+          "key_valid_to": "2021-10-30T10:30:00Z",
+          "expires_at": "2021-10-31T01:00:00Z"
+        }
+      },
+      "VoucherParameterClientError": {
+        "type": "object",
+        "properties": {
+          "details": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "details": "Sorry, we did not understand your request."
+        }
+      },
+      "VoucherParameterNotFoundError": {
+        "type": "object",
+        "properties": {
+          "details": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "details": "Your vehicle reference 'the-fast-car' was not found."
+        }
+      },
+      "DeviceDetailEntry": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "pattern": "^.{1,30}$",
+            "type": "string"
+          },
+          "value": {
+            "pattern": "^.{1,50}$",
+            "type": "string"
+          }
+        }
+      },
+      "VoucherParameter": {
+        "type": "object",
+        "properties": {
+          "external_device_ref": {
+            "type": "string",
+            "description": "This value is used to identify the device (e.g. car) you want to\nretrieve a digital key voucher for. The reference can be any string\nyou have specified as reference for the device in our system.\nIn order to obtain a voucher for a digital key for that device,\nyou have to be allowed to do it. This means that you have to be the\nowner of that device or must be allowed by the owner to reshare \nthe device.\n",
+            "nullable": false
+          },
+          "valid_for": {
+            "type": "string",
+            "description": "Describes the time span the voucher will be valid for; please use\nthe ISO 8601 notation for the timespan. For example \"PT30M\" for a\nduration of 30 minutes.\n",
+            "format": "time-span",
+            "nullable": false
+          },
+          "concurrent_redeem_limit": {
+            "maximum": 2000,
+            "minimum": -1,
+            "type": "integer",
+            "description": "This limit specifies how often a single voucher can be claimed. A \nvalue -1 or 0 counts as infinite, so a voucher can be claimed \nan unlimited ammount of times.\n",
+            "nullable": false
+          },
+          "key_valid_from": {
+            "type": "string",
+            "description": "You need to specify when the key becomes valid (usable for a customer)\nby setting this field. Please use extended ISO 8601 conform time stamps.\n\nIMPORTANT This value also determines when the exact device position\nbecomes visible to a person that has access to the digital key, if the\ndevice supports such capabilities. The digital key and the entry\nassiciated with it in liberkee® app, is immeadiatley visible in the\ndevice list of the app.\n",
+            "format": "date-time",
+            "nullable": false
+          },
+          "key_valid_to": {
+            "type": "string",
+            "description": "You must specify when the key becomes invalid (no longer usable for a \ncustomer) by setting this field. Please use extended ISO 8601 conform\ntime stamp.\n",
+            "format": "date-time",
+            "nullable": false
+          },
+          "device_display_name": {
+            "pattern": "^.{1,50}$",
+            "type": "string",
+            "description": "You can specify the display name of the device that is shown to the\ncustomer after claiming a device.\n",
+            "nullable": false
+          },
+          "display_message": {
+            "pattern": "^.{1,50}$",
+            "type": "string",
+            "description": "You can specify a massage that a customer gets presented,\nwhen claiming the key and viewing the digital key inside the\nliberkee® app; this allows you to add a custum flavor to the\nexperience your customers will have.\n",
+            "nullable": false
+          },
+          "device_details": {
+            "type": "array",
+            "description": "This is a list of 'DeviceDetailEntry' that allows you to\ncontrol the bottom-section of the device-detail screen.\nEvery entry will be rendered as table and title-value pair.\n",
+            "nullable": false,
+            "items": {
+              "$ref": "#/components/schemas/DeviceDetailEntry"
+            }
+          },
+          "custom_branding": {
+            "$ref": "#/components/schemas/VoucherParameter_custom_branding"
+          },
+          "custom_actions": {
+            "type": "array",
+            "description": "We allow you to customize the experience further by overriding\nthe funcitons in the vehicle interaction screen. For example you\nwant the user to be able to end the booking from within the app?\nYou can do that by setting a custom action that performs that\nrequest.\n\nThe intended purpose of this to extend liberkee® app to fit into\nyour exitsting workflows.\n",
+            "nullable": false,
+            "items": {
+              "$ref": "#/components/schemas/CustomAction"
+            }
+          },
+          "user_permissions": {
+            "$ref": "#/components/schemas/VoucherParameter_user_permissions"
+          }
+        },
+        "example": {
+          "external_device_ref": "adventurecar_11@acmerental.com",
+          "valid_for": "PT30M",
+          "concurrent_redeem_limit": 1,
+          "key_valid_from": "2021-01-01T00:00:00Z",
+          "key_valid_to": "2021-01-11T00:00:00Z",
+          "device_display_name": "Landrover Defender",
+          "display_message": "Hejsan, Adventurer 🏕",
+          "device_details": [
+            {
+              "license_plate": "RE CG 1234"
+            },
+            {
+              "emergency_contact": "+49172-555-3386"
+            },
+            {
+              "contact_support": "+49172-555-3333"
+            }
+          ],
+          "custom_branding": {
+            "branding_id": "RentalDotComBrand_1",
+            "background_image_url": "https://images.unsplash.com/photo-1502489597346-dad15683d4c2",
+            "company_name": "ACME Adventure Rentals",
+            "support_hotline": "+49172-555"
+          },
+          "custom_actions": [
+            {
+              "caption": "End the booking",
+              "dialog_type": "Confirmation",
+              "text": "Do you really want to end the booking?",
+              "icon": "EndBooking",
+              "configuration": {
+                "action_type": "HttpRequest",
+                "url": "https://acme-rental.com/bookings/end",
+                "http_method": "POST",
+                "headers": {
+                  "authorization": "token"
+                },
+                "body": {
+                  "booking_reference": "ACMA Rental with ID: 1234"
+                }
+              }
+            },
+            {
+              "caption": "Extend booking",
+              "dialog_type": "Information",
+              "text": "Your booking has been extended.",
+              "icon": "ExtendBooking",
+              "configuration": {
+                "action_type": "HttpRequest",
+                "url": "https://acme-rental.com/bookings/extend",
+                "http_method": "POST",
+                "headers": {
+                  "authorization": "token"
+                },
+                "body": {
+                  "booking_reference": "ACMA Rental with ID: 1234"
+                }
+              }
+            }
+          ],
+          "user_permissions": {
+            "allow_resharing": "false",
+            "allow_resharing_n_times": 0
+          }
+        }
+      },
+      "VoucherParameter_custom_branding": {
+        "type": "object",
+        "properties": {
+          "branding_id": {
+            "pattern": "^.{1,50}$",
+            "type": "string",
+            "description": "Specify the identifier of the banding you want to create you can\nuse any UTF-8 compatible string.\n"
+          },
+          "background_image_url": {
+            "type": "string",
+            "description": "Specify the URL of the image you want to use in the\nbranding; the image be displayed inside the view of your key.\n",
+            "format": "url"
+          },
+          "company_name": {
+            "pattern": "^.{1,75}$",
+            "type": "string",
+            "description": "This is the company name you want the user to see in view.\n"
+          },
+          "support_hotline": {
+            "type": "string",
+            "description": "Specify this phone number to enable the feature to call the\nsupport; you can specify any number you like; this will not be\nvisible to the user; if you want to have it visible, then please\nset the 'device_devtails' above.\n"
+          }
+        },
+        "description": "Add this if you want to have a custom branding inside the liberkee®\napp for this key; if \"\" is given, the branding will be the liberkee's\ndefault; if you are interested in a custom branding, please contact\nus and have a look at our [documentation](https://www.notion.so/Integrations-21c83bb335f74526865ea57fc63949fe).\n"
+      },
+      "VoucherParameter_user_permissions": {
+        "type": "object",
+        "properties": {
+          "allow_resharing": {
+            "type": "boolean",
+            "description": "This is a flag to control the resharing behaviour of the \nvoucher; if this is set to 'true' the voucher can be shared as \nmany times as specified in the 'resharing_allowed_n_times'\nproperty; setting this to 'true' while not specifiyng a number\nfor 'resharing_allowed_n_times' will result in the same behaviour\nas setting this value to 'false'.\n",
+            "nullable": false,
+            "default": false
+          },
+          "allow_resharing_n_times": {
+            "type": "number",
+            "description": "The number of times a voucher can be used to obtain a digital\nkey; every _new_ user, that redeems the voucher will substract\none from this count; a single user redeeming the voucher\nmultiple times, will have no effect; if this value reaches 0,\nthe voucher can no longer be redeemed.\n",
+            "format": "integer",
+            "nullable": false,
+            "default": 0
+          }
+        },
+        "description": "Specify what a customer is allowed to do with this key by specifying\nthe attributes for key handling.\n"
+      }
+    },
+    "securitySchemes": {
+      "oAuth": {
+        "type": "oauth2",
+        "description": "This API uses OAuth 2.0 with the client credential flow.\n[More info](https://api.example.com/docs/auth).\nContact us if you want to receive a client for using this API.\n",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://identity.prod.liberkee.com/connect/token",
+            "scopes": {
+              "api.liberke": "Access to the liberkee API."
+            }
+          }
+        }
+      }
+    }
+  }
+}
