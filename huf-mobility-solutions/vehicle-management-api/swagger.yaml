@@ -346,6 +346,10 @@ paths:
       responses:
         '201':
           description: Item created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleCreated'
         '400':
           description: Invalid input/required property not set.
         '401':
@@ -359,7 +363,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Vehicle'
-        description: Vehicle data of the new vehicle
       tags:
         - Vehicle Management
 # }}} vehicles #
@@ -543,14 +546,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - id
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: 06750a45-0dae-4d31-9215-c4ad40995642
+                $ref: '#/components/schemas/LocationCreated'
         '400':
           description: invalid input/required property not set
         '401':
@@ -564,8 +560,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LocationCreate'
-        description: location data
-
 # }}}  #
 components:
   schemas:
@@ -907,6 +901,55 @@ components:
         phone:
           type: string
           example: "+49 2501 272 0"
+    LocationCreated:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Liberkee Velbert
+        country:
+          type: string
+          example: Germany
+        state:
+          type: string
+          example: NRW
+        city:
+          type: string
+          example: Velbert
+        zip:
+          type: string
+          example: "42551"
+        address:
+          type: string
+          example: "Haberstrasse 46"
+        address2:
+          type: string
+          example: "Level 3"
+        additionalInfo:
+          type: string
+          example: "Text that describes something"
+        email:
+          type: string
+          example: "kij@kong.com"
+        phone:
+          type: string
+          example: "+49 2501 272 0"
+        parentLocation:
+          type: object
+          properties:
+            id:
+              type: string
+              format: UUID
+              example: 'ba2da3c0-8ae1-11eb-9770-37432bab8c9d'
+            name:
+              type: string
+              example: Liberkee-Germany
+        id:
+          type: string
+          format: UUID
+          example: '683c2200-8ae4-11eb-9770-37432bab8c9d'
     LocationUpdate:
       type: object
       properties:
@@ -967,6 +1010,35 @@ components:
         modelYear:
           type: string
           example: '2020'
+    VehicleCreated:
+      type: object
+      required:
+        - externalVehicleRef
+      properties:
+        externalVehicleRef:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        brand:
+          type: string
+          example: Nissan
+        model:
+          type: string
+          example: Altima
+        vin:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        licensePlate:
+          type: string
+          example: ME-HF 333
+        modelYear:
+          type: string
+          example: '2020'
+        homeLocation:
+          type: object
+          properties:
+            id:
+              type: string
+              example: '675c77c0-8ae1-11eb-9770-37432bab8c9d'
     VehicleUpdate:
       type: object
       required:
