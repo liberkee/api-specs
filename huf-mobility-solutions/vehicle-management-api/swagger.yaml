@@ -187,9 +187,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Vehicles'
+                  $ref: '#/components/schemas/Vehicle'
         '401':
-          description: unauthorized
+          description: Unauthorized
       tags:
         - Vehicle Management
 
@@ -327,6 +327,7 @@ paths:
         | vin | vehicle identification number | 1FTFW1ET3BKD42728 |
         | licensePlate | number plate/license plate of the vehicle | ME-HF 333 |
         | modelYear | vehicle construction year | 2020 |
+        | hufVehicleTypeId | vehicle configuration id | 000156_VW_Golf_2017-2020 |
       parameters:
         - name: X-Authorization
           in: header
@@ -400,7 +401,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Location'
         '401':
-          description: unauthorized
+          description: Unauthorized
 
   /locations/{locationId}:
     get:
@@ -436,7 +437,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Location'
         '401':
-          description: unauthorized
+          description: Unauthorized
     put:
       tags:
         - Location Management
@@ -468,7 +469,7 @@ paths:
         '400':
           description: invalid input/required property not set
         '401':
-          description: unauthorized
+          description: Unauthorized
         '404':
           description: Location or new parent location could not be found.
         '409':
@@ -509,7 +510,7 @@ paths:
         '400':
           description: invalid location uuid;
         '401':
-          description: unauthorized
+          description: Unauthorized
         '404':
           description: location not found
         '409':
@@ -550,7 +551,7 @@ paths:
         '400':
           description: invalid input/required property not set
         '401':
-          description: unauthorized
+          description: Unauthorized
         '404':
           description: Parent location was not found.
         '409':
@@ -992,6 +993,10 @@ components:
       required:
         - externalVehicleRef
       properties:
+        id:
+          type: string
+          format: UUID
+          example: '6c0e3bf0-9ce8-11eb-9770-37432bab8c9d'
         externalVehicleRef:
           type: string
           example: 1FTFW1ET3BKD42728
@@ -1010,11 +1015,38 @@ components:
         modelYear:
           type: string
           example: '2020'
+        hufVehicleTypeId:
+          type: string
+          example: '000156_VW_GOLF_2017-2020'
+        homeLocation:
+          $ref: '#/components/schemas/Location'
+        equipedWith:
+          type: array
+          items:
+            type: object
+            properties:
+              deviceType:
+                type: string
+                enum:
+                  - CAM
+                  - Keyholder
+                example: CAM
+              deviceId:
+                type: string
+                format: UUID
+                example: '4ec3e9a0-9ce8-11eb-9770-37432bab8c9d'
+              deviceLabel:
+                type: string
+                example: '20120214TT1601:354679090890537'
     VehicleCreated:
       type: object
       required:
         - externalVehicleRef
       properties:
+        id:
+          type: string
+          format: UUID
+          example: '6c0e3bf0-9ce8-11eb-9770-37432bab8c9d'
         externalVehicleRef:
           type: string
           example: 1FTFW1ET3BKD42728
@@ -1033,6 +1065,9 @@ components:
         modelYear:
           type: string
           example: '2020'
+        hufVehicleTypeId:
+          type: string
+          example: '000156_VW_GOLF_2017-2020'
         homeLocation:
           type: object
           properties:
@@ -1062,26 +1097,10 @@ components:
         modelYear:
           type: string
           example: '2020'
+        hufVehicleTypeId:
+          type: string
+          example: '000156_VW_GOLF_2017-2020'
         homeLocationId:
           type: string
           format: uuid
           example: 9b075a46-1d4b-46a3-a8ca-14c5e218054d
-    Vehicles:
-      type: object
-      required:
-        - vehicle
-        - location
-      properties:
-        vehicle:
-          $ref: '#/components/schemas/Vehicle'
-        location:
-          $ref: '#/components/schemas/Location'
-        equipedWith:
-          type: object
-          properties:
-            cam:
-              type: boolean
-              example: true
-            keyholder:
-              type: boolean
-              example: false
