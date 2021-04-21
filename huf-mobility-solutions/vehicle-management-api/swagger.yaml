@@ -26,6 +26,14 @@ paths:
       description: |
         Send username and password information and retrieve an auth token in the response which
         shall be used in every request to read, create, update and delete vehicle and location resources.
+      parameters:
+        - name: Content-Type
+          in: header
+          description: Content type header
+          required: true
+          schema:
+            type: string
+            example: 'application/json'
       responses:
         '200':
           description: Login succeeded.
@@ -246,6 +254,13 @@ paths:
 
         By providing a new `homeLocationId` attribute in the request body, the vehicle will be moved to the new location.
       parameters:
+        - name: Content-Type
+          in: header
+          description: Content type header
+          required: true
+          schema:
+            type: string
+            example: 'application/json'
         - name: X-Authorization
           in: header
           description: Authentication header
@@ -311,7 +326,7 @@ paths:
       tags:
         - Vehicle Management
     
-  /vehicle/{homeLocationId}:
+  /vehicles/{homeLocationId}:
     post:
       summary: Add a new vehicle to a location
       operationId: postVehicleHomeLocationId
@@ -329,6 +344,13 @@ paths:
         | modelYear | vehicle construction year | 2020 |
         | hufVehicleTypeId | vehicle configuration id | 000156_VW_Golf_2017-2020 |
       parameters:
+        - name: Content-Type
+          in: header
+          description: Content type header
+          required: true
+          schema:
+            type: string
+            example: 'application/json'
         - name: X-Authorization
           in: header
           description: Authentication header
@@ -450,6 +472,13 @@ paths:
         
         This PUT request does not create a location if it does not exist. You can only use it to update existing locations.
       parameters:
+        - name: Content-Type
+          in: header
+          description: Content type header
+          required: true
+          schema:
+            type: string
+            example: 'application/json'
         - name: X-Authorization
           in: header
           description: Authentication header
@@ -529,6 +558,13 @@ paths:
 
         Leave the parameter for `parentLocationId` blank (`""`) to add a new top level location.
       parameters:
+        - name: Content-Type
+          in: header
+          description: Content type header
+          required: true
+          schema:
+            type: string
+            example: 'application/json'
         - name: X-Authorization
           in: header
           description: Authentication header
