@@ -408,6 +408,13 @@ paths:
           schema:
             type: string
             example: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqQGh1ZnNtLmNvbSIsInNj...b3BlcyI6WyJDVVNUT01F'
+        - name: locationName
+          in: query
+          description: Filter location by name. If you include special characters and whitespaces, make sure to encode them accordingly.
+          required: false
+          schema:
+            type: string
+            example: 'New York'
         - name: hierarchy
           in: query
           description: Set to "true" to get hierarchical list.
