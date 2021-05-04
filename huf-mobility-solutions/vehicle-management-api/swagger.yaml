@@ -417,11 +417,11 @@ paths:
             example: 'New York'
         - name: hierarchy
           in: query
-          description: Set to "true" to get hierarchical list.
+          description: Include this query parameter to get hierarchical list of locations.
           required: false
           schema:
             type: string
-            example: 'true'
+            example: 'something'
       responses:
         '200':
           description: Search results matching criteria.
