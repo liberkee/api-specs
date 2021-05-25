@@ -278,6 +278,10 @@ paths:
       responses:
         '201':
           description: Item updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
         '400':
           description: Invalid input/required property not set.
         '401':
@@ -1040,6 +1044,11 @@ components:
       required:
         - externalVehicleRef
       properties:
+        iot_db_name:
+          type: string
+          description: |
+            Only internally used by Liberkee. Composed from 'externalvehicleRef' + '@' + 'internalCustomerIdentifier'
+          example: '1FTFW1ET3BKD42728@liberkee'
         id:
           type: string
           format: UUID
