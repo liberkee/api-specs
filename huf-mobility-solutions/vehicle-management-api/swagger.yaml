@@ -591,7 +591,7 @@ paths:
             type: string
             example: 0
       responses:
-        '200':
+        '201':
           description: Item created, locationId returned.
           content:
             application/json:
