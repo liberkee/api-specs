@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: v3.2.1
+  version: v3.4.0
   title: Liberkee Voucher API
 
 tags:
@@ -161,6 +161,57 @@ paths:
       tags:
         - Digital Key Voucher Management
 
+  /vouchers/{voucher_id}/revoke:
+    post:
+      summary: "Revoke the voucher for 'voucher_id'"
+      operationId: revokeVoucherCode
+      description: |
+        Revoke all access that was redeemed through this voucher and deny any
+        future attempts of redeeming access through it.
+      parameters:
+        - in: path
+          name: voucher_id
+          required: true
+          schema:
+            type: string
+          description: The Voucher ID
+
+      security:
+        - oAuth:
+          - create_voucher_code_for_device
+
+      responses:
+        '200':
+          description: |
+            The "KeyVoucher" object with the voucher code and meta
+            information for the digital key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyVoucher'
+        '400':
+          description: |
+            This code indicates that one of your parameters caused an issue. 
+            Read the response for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoucherParameterClientError'
+        '401':
+          description: |
+            Please authorize first to use this route.
+        '403':
+          description: |
+            You are not allowed to use this route.
+        '404':
+          description: | 
+            The external device reference you specified was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoucherParameterNotFoundError'
+      tags:
+        - Digital Key Voucher Management
 
   /vouchers/{voucher_id}:
     delete:
@@ -320,6 +371,17 @@ components:
             expressed as extended ISO 8601.
           type: string
           format: date-time
+        revoked:
+          description: |
+            Indicates if the voucher has been revoked.
+          type: boolean
+        revoked_at:
+          description: |
+            The time the voucher has been revoked at. null if the voucher has
+            not been revoked.
+          type: string
+          format: date-time
+          nullable: true
 
       example:
         id: "adventure11acmerental"
@@ -328,7 +390,8 @@ components:
         key_valid_from: "2021-10-30T07:30:00Z"
         key_valid_to: "2021-10-30T10:30:00Z"
         expires_at: "2021-10-31T01:00:00Z"
-
+        revoked: false
+        revoked_at: null
 
     KeyVouchers:
       description: "List of Key Vouchers for digital keys."
@@ -344,12 +407,16 @@ components:
           key_valid_from: "2021-10-30T07:30:00Z"
           key_valid_to: "2021-10-30T10:30:00Z"
           expires_at: "2021-10-31T01:00:00Z"
+          revoked: false
+          revoked_at: null
         - id: "acmerental1"
           external_device_ref: "acmerental1@acmerental.com"
           voucher: "https://liberkee.com/redeem/acmerental_global"
           key_valid_from: "2021-10-30T07:30:00Z"
           key_valid_to: "2021-10-30T10:30:00Z"
           expires_at: "2021-10-31T01:00:00Z"
+          revoked: true
+          revoked_at: "2021-10-30T08:00:00Z"
 
 
     VoucherParameterClientError:
