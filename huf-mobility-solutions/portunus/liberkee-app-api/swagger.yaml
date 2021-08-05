@@ -1,0 +1,171 @@
+openapi: '3.0.2'
+info:
+  title: liberkee App API
+  version: '0.1'
+servers:
+  - url: https://api.prod.liberkee.com
+
+tags:
+  - name: Account linking
+    description: Routes to link or unlink third party accounts to liberkee accounts and import/remove.
+  - name: Devices
+    description: Routes to lock or unlock a device remotely and to synchronize device lists.
+  - name: Vouchers and Sharing
+    description: Routes related to sharing devices.
+
+paths:
+  /account/kleverkey/link:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KleverkeyApiKey'
+
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: "Account linking failed"
+        '401': 
+          description: "Not authenticated"
+        '403': 
+          description: "Forbidden"
+        '409': 
+          description: "Cannot link more than one KleverKey account"
+      tags:
+        - Account linking
+
+  /account/kleverkey/unlink:
+    post:
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: "Account unlinking failed"
+        '404':
+          description: "Account has not been linked before"
+        '401': 
+          description: "Not authenticated"
+        '403': 
+          description: "Forbidden"
+      tags:
+        - Account linking
+
+  /devices/synchronize:
+    post:
+      summary: "Synchronize devices of linked accounts with liberkee"
+      responses:
+        '200':
+          description: OK
+      tags:
+        - Devices
+
+  /devices/{device_id}/lock:
+    post:
+      summary: "Remotely lock an online device"
+      parameters:
+        - in: path
+          name: device_id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+          description: The device ID in liberkee
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: "Not authenticated"
+        '403': 
+          description: "Forbidden"
+      tags:
+        - Devices
+
+  /devices/{device_id}/unlock:
+    post:
+      summary: "Remotely unlock an online device"
+      parameters:
+        - in: path
+          name: device_id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+          description: The device ID in liberkee
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: "Not authenticated"
+        '403': 
+          description: "Forbidden"
+      tags:
+        - Devices
+
+  /devices/{device_id}/share:
+    post:
+      summary: "Create a Voucher for the device."
+      description: |
+        Create a Voucher that other users may use to gain access to a device.
+      parameters:
+        - in: path
+          name: device_id   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: string
+            minimum: 1
+          description: The device ID in liberkee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShareParameters'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: "Not authenticated"
+        '403': 
+          description: "Forbidden"
+        '404': 
+          description: "Not found"
+      tags:
+        - Vouchers and Sharing
+
+components:
+  schemas:
+    KleverkeyApiKey:
+      description: "API Key created in KleverKey web portal."
+      type: object
+      properties:
+        api_key:
+          type: string
+
+    ShareParameters:
+      description: "Parameters for key/voucher created when sharing a device."
+      type: object
+      properties:
+        key_valid_from:
+          description: |
+            The start time the digital key that this voucher
+            represents starts being usable, expressed in extended ISO 8601.
+          type: string
+          format: date-time
+          nullable: false
+        key_valid_to:
+          description: |
+            The start time the digital key that this voucher
+            represents stops being usable, expressed in extended ISO 8601.
+          type: string
+          format: date-time
+          nullable: false
+        concurrent_redeem_limit:
+          description: |
+            This limit specifies how often a single voucher can be claimed. A 
+            value -1 or 0 counts as infinite, so a voucher can be claimed 
+            an unlimited amount of times.
+          type: integer
+          minimum: -1
+          maximum: 2000
+          nullable: false
