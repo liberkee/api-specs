@@ -1,7 +1,7 @@
 openapi: '3.0.2'
 info:
   title: liberkee App API
-  version: '0.1'
+  version: '3.8'
 servers:
   - url: https://api.prod.liberkee.com
 
@@ -37,6 +37,44 @@ paths:
         - Account linking
 
   /account/kleverkey/unlink:
+    post:
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: "Account unlinking failed"
+        '404':
+          description: "Account has not been linked before"
+        '401': 
+          description: "Not authenticated"
+        '403': 
+          description: "Forbidden"
+      tags:
+        - Account linking
+
+  /account/kiwi/link:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KiwiCredentials'
+
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: "Account linking failed"
+        '401': 
+          description: "Not authenticated"
+        '403': 
+          description: "Forbidden"
+        '409': 
+          description: "Cannot link more than one KIWI account"
+      tags:
+        - Account linking
+
+  /account/kiwi/unlink:
     post:
       responses:
         '200':
@@ -141,6 +179,20 @@ components:
       properties:
         api_key:
           type: string
+          nullable: false
+
+    KiwiCredentials:
+      description: "User login credentials for a KIWI user."
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          nullable: false
+        password:
+          type: string
+          format: password
+          nullable: false
 
     ShareParameters:
       description: "Parameters for key/voucher created when sharing a device."
