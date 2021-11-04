@@ -391,7 +391,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Vehicle'
+              $ref: '#/components/schemas/VehicleCreate'
       tags:
         - Vehicle Management
 # }}} vehicles #
@@ -1160,3 +1160,29 @@ components:
           type: string
           format: uuid
           example: 9b075a46-1d4b-46a3-a8ca-14c5e218054d
+    VehicleCreate:
+      type: object
+      required:
+        - externalVehicleRef
+      properties:
+        externalVehicleRef:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        brand:
+          type: string
+          example: Nissan
+        model:
+          type: string
+          example: Altima
+        vin:
+          type: string
+          example: 1FTFW1ET3BKD42728
+        licensePlate:
+          type: string
+          example: ME-HF 333
+        modelYear:
+          type: string
+          example: '2020'
+        hufVehicleTypeId:
+          type: string
+          example: '000156_VW_GOLF_2017-2020'
