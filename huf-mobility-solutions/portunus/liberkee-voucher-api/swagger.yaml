@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: v3.4.0
+  version: v3.9.0
   title: Liberkee Voucher API
 
 tags:
@@ -11,7 +11,7 @@ paths:
   /vouchers:
     get:
       summary: "Get all vouchers that the user created. Optionally, filter for
-      a single vehicle."
+        a single vehicle."
 
       parameters:
         - in: query
@@ -27,7 +27,7 @@ paths:
       responses:
         '200':
           description: |
-            The "KeyVoucher" object with the voucher code and meta
+            The "KeyVoucher" object with the Voucher code and meta
             information for the digital key.
           content:
             application/json:
@@ -53,10 +53,10 @@ paths:
 
   /vouchers/create:
     post:
-      summary: Create a voucher for digital keys.
+      summary: Create a Voucher for digital keys.
       operationId: getVoucherCode
       description: |
-        Request a voucher for usage in the liberkee® app.
+        Request a Voucher for usage in the liberkee® app.
       requestBody:
         content:
           application/json:
@@ -70,7 +70,7 @@ paths:
       responses:
         '201':
           description: |
-            The "KeyVoucher" object with the voucher code and meta
+            The "KeyVoucher" object with the Voucher code and meta
             information for the digital key.
           content:
             application/json:
@@ -103,10 +103,10 @@ paths:
 
   /vouchers/{voucher_id}/update:
     post:
-      summary: "Update the voucher for 'voucher_id'"
+      summary: "Update the Voucher for 'voucher_id'"
       operationId: updateVoucherCode
       description: |
-        Update the voucher for voucher_id and all the assiciated digital keys.
+        Update the Voucher for voucher_id and all the assiciated digital keys.
         This is useful to update or change your booking; for example a booking
         can be extended or invalidated. To cancel a booking, use vouchers with
         the method DELETE.
@@ -131,7 +131,7 @@ paths:
       responses:
         '201':
           description: |
-            The "KeyVoucher" object with the voucher code and meta
+            The "KeyVoucher" object with the Voucher code and meta
             information for the digital key.
           content:
             application/json:
@@ -163,10 +163,10 @@ paths:
 
   /vouchers/{voucher_id}/revoke:
     post:
-      summary: "Revoke the voucher for 'voucher_id'"
+      summary: "Revoke the Voucher for 'voucher_id'"
       operationId: revokeVoucherCode
       description: |
-        Revoke all access that was redeemed through this voucher and deny any
+        Revoke all access that was redeemed through this Voucher and deny any
         future attempts of redeeming access through it.
       parameters:
         - in: path
@@ -183,7 +183,7 @@ paths:
       responses:
         '200':
           description: |
-            The "KeyVoucher" object with the voucher code and meta
+            The "KeyVoucher" object with the Voucher code and meta
             information for the digital key.
           content:
             application/json:
@@ -214,8 +214,50 @@ paths:
         - Digital Key Voucher Management
 
   /vouchers/{voucher_id}:
+    get:
+      summary: "Get the Voucher with the given ID."
+
+      parameters:
+        - in: path
+          name: voucher_id
+          required: true
+          schema:
+            type: string
+          description: The Voucher ID
+
+      security:
+        - oAuth:
+          - create_voucher_code_for_device
+
+      responses:
+        '200':
+          description: |
+            The "KeyVoucher" object with the Voucher code and meta
+            information for the digital key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyVoucher'
+        '400':
+          description: |
+            This code indicates that one of your parameters caused an issue. 
+            Read the response for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoucherParameterClientError'
+        '401':
+          description: |
+            Please authorize first to use this route.
+        '404':
+          description: |
+            The requested Voucher could not be found. It either does not exist or you have no
+            access to it.
+      tags:
+        - Digital Key Voucher Management
+
     delete:
-      summary: "Delete a voucher and all digital keys associated with it."
+      summary: "Delete a Voucher and all digital keys associated with it."
 
       parameters:
         - in: path
@@ -340,14 +382,14 @@ components:
       properties:
         id:
           description: |
-            The id of the voucher.
+            The id of the Voucher.
           type: string
           pattern: "^[a-zA-Z0-9]{20}$"
         external_device_ref:
           description: |
-           The reference to the device a voucher is connected to.
+           The reference to the device a Voucher is connected to.
            type: string
-        voucher:
+        Voucher:
           description: |
             The string to present to your user; it is designed to be
             understood by the mobile operating system to open the liberkee® app.
@@ -355,29 +397,29 @@ components:
           pattern: "^https://liberkee.com:/redeem/[a-zA-Z0-9]{20}$"
         key_valid_from:
           description: |
-            The start time the digital key that this voucher
+            The start time the digital key that this Voucher
             represents becomes usable, expressed in extended ISO 8601.
           type: string
           format: date-time
         key_valid_to:
           description: |
-            The start time the digital key that this voucher
+            The start time the digital key that this Voucher
             represents stops being usable, expressed in extended ISO 8601.
           type: string
           format: date-time
         expires_at:
           description: |
-            The time when the voucher code becomes invalid,
+            The time when the Voucher code becomes invalid,
             expressed as extended ISO 8601.
           type: string
           format: date-time
         revoked:
           description: |
-            Indicates if the voucher has been revoked.
+            Indicates if the Voucher has been revoked.
           type: boolean
         revoked_at:
           description: |
-            The time the voucher has been revoked at. null if the voucher has
+            The time the Voucher has been revoked at. null if the Voucher has
             not been revoked.
           type: string
           format: date-time
@@ -386,7 +428,7 @@ components:
       example:
         id: "adventure11acmerental"
         external_device_ref: "adventurecar_11@acmerental.com"
-        voucher: "https://liberkee.com/redeem/adventure11acmerental"
+        Voucher: "https://liberkee.com/redeem/adventure11acmerental"
         key_valid_from: "2021-10-30T07:30:00Z"
         key_valid_to: "2021-10-30T10:30:00Z"
         expires_at: "2021-10-31T01:00:00Z"
@@ -403,7 +445,7 @@ components:
       example:
         - id: "adventure11acmerental"
           external_device_ref: "adventurecar_11@acmerental.com"
-          voucher: "https://liberkee.com/redeem/adventure11acmerental"
+          Voucher: "https://liberkee.com/redeem/adventure11acmerental"
           key_valid_from: "2021-10-30T07:30:00Z"
           key_valid_to: "2021-10-30T10:30:00Z"
           expires_at: "2021-10-31T01:00:00Z"
@@ -411,7 +453,7 @@ components:
           revoked_at: null
         - id: "acmerental1"
           external_device_ref: "acmerental1@acmerental.com"
-          voucher: "https://liberkee.com/redeem/acmerental_global"
+          Voucher: "https://liberkee.com/redeem/acmerental_global"
           key_valid_from: "2021-10-30T07:30:00Z"
           key_valid_to: "2021-10-30T10:30:00Z"
           expires_at: "2021-10-31T01:00:00Z"
@@ -454,9 +496,9 @@ components:
         external_device_ref:
           description: |
             This value is used to identify the device (e.g. car) you want to
-            retrieve a digital key voucher for. The reference can be any string
+            retrieve a digital key Voucher for. The reference can be any string
             you have specified as reference for the device in our system.
-            In order to obtain a voucher for a digital key for that device,
+            In order to obtain a Voucher for a digital key for that device,
             you have to be allowed to do it. This means that you have to be the
             owner of that device or must be allowed by the owner to reshare 
             the device.
@@ -465,7 +507,7 @@ components:
 
         valid_for:
           description: |
-            Describes the time span the voucher will be valid for; please use
+            Describes the time span the Voucher will be valid for; please use
             the ISO 8601 notation for the timespan. For example "PT30M" for a
             duration of 30 minutes.
           type: string
@@ -474,8 +516,8 @@ components:
 
         concurrent_redeem_limit:
           description: |
-            This limit specifies how often a single voucher can be claimed. A 
-            value -1 or 0 counts as infinite, so a voucher can be claimed 
+            This limit specifies how often a single Voucher can be claimed. A 
+            value -1 or 0 counts as infinite, so a Voucher can be claimed 
             an unlimited ammount of times.
           type: integer
           minimum: -1
@@ -592,7 +634,7 @@ components:
               type: boolean
               description: |
                 This is a flag to control the resharing behaviour of the 
-                voucher; if this is set to 'true' the voucher can be shared as 
+                Voucher; if this is set to 'true' the Voucher can be shared as 
                 many times as specified in the 'resharing_allowed_n_times'
                 property; setting this to 'true' while not specifiyng a number
                 for 'resharing_allowed_n_times' will result in the same behaviour
@@ -601,11 +643,11 @@ components:
               nullable: false
             allow_resharing_n_times:
               description: |
-                The number of times a voucher can be used to obtain a digital
-                key; every _new_ user, that redeems the voucher will substract
-                one from this count; a single user redeeming the voucher
+                The number of times a Voucher can be used to obtain a digital
+                key; every _new_ user, that redeems the Voucher will substract
+                one from this count; a single user redeeming the Voucher
                 multiple times, will have no effect; if this value reaches 0,
-                the voucher can no longer be redeemed.
+                the Voucher can no longer be redeemed.
               type: number
               format: integer
               default: 0
